@@ -1,0 +1,1 @@
+### [07.10.26] - Skapade filerna CHANGELOG.md, hardening-gudie.md, incident-playbook.md, .gitignore (vi la in .pcap.key och secrets) samt skapade mappen docs
