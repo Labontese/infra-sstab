@@ -11,21 +11,18 @@ ssh pve "qm status 114"
 
 ## 2. Hitta test-sstabs IP-adress
 
-Enklast via guest agent:
-```
-ssh pve "qm guest cmd 114 network-get-interfaces"
-```
-
-Svarar den `QEMU guest agent is not running` (vanligt de första minuterna efter start, se [reference/test-sstab-specifikation.md](../reference/test-sstab-specifikation.md)), slå upp MAC-adressen i ARP-tabellen på noden istället:
+Guest agent är **inte installerat** i avbildningen (se [reference/test-sstab-specifikation.md](../reference/test-sstab-specifikation.md)) – `qm guest cmd 114 ...` kommer alltid svara `QEMU guest agent is not running`, även när allt fungerar. Slå istället upp MAC-adressen i ARP-tabellen på noden:
 ```
 ssh pve "qm config 114 | grep net0"          # ger MAC-adressen
 ssh pve 'ip neigh show | grep -i "<mac-i-gemener>"'
 ```
-En rad med en `10.10.x.x`-adress (inte `fe80::...`) är IPv4-adressen.
+En rad med en `10.10.x.x`-adress (inte `fe80::...`) är IPv4-adressen. Just nu är den `10.10.0.217`, men den kan ändras vid ombootning (DHCP).
+
+Hittar du ingen ARP-post alls (VM:en har inte skickat trafik nyligen): logga in via Proxmox-konsolen i webb-UI:t istället (`root`, tillfälligt lösenord – se referensen) och kör `ip a` direkt i gästen.
 
 ## 3. SSH in på servern
 
 ```
-ssh root@<ip-från-steg-2>
+ssh root@10.10.0.217
 ```
 (din publika nyckel måste vara satt enligt [tutorials/skapa-och-starta-test-sstab.md](../tutorials/skapa-och-starta-test-sstab.md)).
