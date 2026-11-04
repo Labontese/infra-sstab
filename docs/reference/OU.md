@@ -10,7 +10,7 @@ Active Directory Users and Computers (ADUC) används för att administrera anvä
 1. Öppna **Server Manager**.
 2. Klicka på **Tools**.
 3. Välj **Active Directory Users and Computers**.
-4. Öppna domänen `chaslab.local`.
+4. Öppna domänen `sost.local`.
 
 Här visas domänens användare, grupper och organisationsenheter.
 

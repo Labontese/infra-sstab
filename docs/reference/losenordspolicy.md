@@ -11,7 +11,7 @@ Lösenordspolicyn för en avdelning skapas som ett lösenordsinställningsobjekt
 1. Öppna **Server Manager**.
 2. Klicka på **Tools**.
 3. Välj **Active Directory Administrative Center**.
-4. Gå till **chaslab (local) → System → Password Settings Container**.
+4. Gå till **sost (local) → System → Password Settings Container**.
 
 ## Steg 2 – Skapa lösenordsinställningar
 
