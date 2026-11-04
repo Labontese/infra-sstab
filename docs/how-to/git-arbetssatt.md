@@ -66,6 +66,7 @@ git branch -a                        # alla branches, lokala + remote
 
 ```
 git add <fil>                        # lägg till en specifik fil (undvik git add . om du inte kollat status först)
+git add docs/how-to/git-arbetssatt.md   # exempel: lägg till en specifik fil med filnamn
 git commit -m "docs: kort beskrivning av vad och varför"
 git push                             # om branchen redan spåras mot remote
 git push -u origin <ditt-namn>       # första gången du pushar branchen
