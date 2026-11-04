@@ -7,7 +7,7 @@ Driftdokumentation för **Skämt & Sido Transport AB**, skoluppgiften Boiler Roo
 | Server | Roll | IP-adress |
 |---|---|---|
 | SRV-01-DC | Windows Server 2025: AD DS, DNS, DHCP | 192.168.50.10 |
-| SRV-02-LNX | Ubuntu Server: Samba/NFS, webb (nginx) | 192.168.50.50 |
+| SRV-02-LNX | Ubuntu Server: backup | 192.168.50.50 |
 | FW01 | Brandvägg och gateway | 192.168.50.1 / 192.168.99.1 |
 | SW01 | Core-switch | 192.168.99.2 |
 
@@ -36,8 +36,9 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 |---|---|
 | [IP-adressplan](docs/reference/ip-plan.md) | Nät, adressindelning, servrar (CI) och åtkomstregler |
 | [Användare och säkerhetsgrupper](docs/reference/OU.md) | OU:er per avdelning, användarkonton och säkerhetsgrupper i AD |
-| [Behörighetsmatris och SMB](docs/reference/acl/acc-plan.md) | Vilka grupper som får läsa och skriva i vilka mappar, Samba-konfiguration |
-| [Lösenords- och utlåsningspolicy](docs/reference/losenordspolicy.md) | PSO:er per avdelning enligt CIS Benchmark kapitel 1 |
+| [Behörighetsmatris](docs/reference/acl/acc-plan.md) | Vilka grupper som får läsa och skriva i vilka mappar |
+| [Lösenords- och utlåsningspolicy](docs/reference/losenordspolicy.md) | Default Domain Policy och PSO:er per avdelning enligt CIS Benchmark kapitel 1 |
+| [Minsta rättighet](docs/reference/least-privilege.md) | Rättigheter på domänkontrollanten enligt CIS kapitel 2.2 och behörighet per grupp |
 
 ### Övrigt
 

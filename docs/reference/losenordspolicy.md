@@ -28,7 +28,7 @@ En PSO skapades för lagerpersonalen.
 
 ### Password Policy
 
-| CIS | Inställning | CIS-krav | Anställd Lager |
+| CIS | Inställning | CIS-krav | Anställd Lager / Default Domain Policy |
 |---|---|---|---|
 | 1.1.1 | Enforce password history | 24 eller fler | 24 |
 | 1.1.2 | Maximum password age | 365 dagar eller färre, inte 0 | 100 dagar |
@@ -39,7 +39,7 @@ En PSO skapades för lagerpersonalen.
 
 ### Account Lockout Policy
 
-| CIS | Inställning | CIS-krav | Anställd Lager |
+| CIS | Inställning | CIS-krav | Anställd Lager / Default Domain Policy |
 |---|---|---|---|
 | 1.2.1 | Account lockout duration | 15 minuter eller mer | 30 minuter |
 | 1.2.2 | Account lockout threshold | 5 försök eller färre, inte 0 | 5 |
@@ -127,6 +127,25 @@ PSO:n följer gruppmedlemskapet. När en användare byter avdelning byts gruppen
 
 Utlåsning och maxålder på lösenordet gäller direkt. Längd och komplexitet kontrolleras först vid nästa lösenordsbyte. Om användaren tillfälligt finns i båda grupperna gäller PSO:n med lägst precedence.
 
+## Steg 6 – Domänens standardpolicy (Default Domain Policy)
+
+Default Domain Policy gäller alla konton som inte omfattas av en PSO, till exempel adminkonton. PSO:erna är undantag per avdelning. CIS anger att inställningarna i 1.1 och 1.2 ska sättas här för att gälla domänkontona.
+
+### Genomförande
+
+1. Öppna **Server Manager**.
+2. Klicka på **Tools**.
+3. Välj **Group Policy Management**.
+4. Gå till **Forest → Domains → sost.local**.
+5. Högerklicka på **Default Domain Policy** och välj **Edit**.
+6. Gå till **Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies**.
+7. Ange värdena under **Password Policy** och **Account Lockout Policy** enligt tabellerna i Steg 2.
+8. Kör `gpupdate /force` i PowerShell.
+9. Kontrollera att värdena gäller:
+   ```powershell
+   Get-ADDefaultDomainPasswordPolicy
+   ```
+
 ## Resultat
 
 Följande har genomförts:
@@ -137,3 +156,4 @@ Följande har genomförts:
 - Kontoutlåsning efter 5 misslyckade försök i 30 minuter (CIS 1.2.1, 1.2.2, 1.2.4).
 - Lösenordsbyte tidigast efter 1 dag och senast efter 100 dagar, och de 24 senaste lösenorden får inte återanvändas (CIS 1.1.1–1.1.3).
 - Koppling av PSO:n till säkerhetsgruppen `Lager`.
+- Default Domain Policy med CIS 1.1 och 1.2.
