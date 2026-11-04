@@ -58,6 +58,9 @@ PSO:n kopplades till säkerhetsgruppen `Lager`, så att den gäller alla använd
 3. Ange gruppen `Lager` och klicka på **Check Names**.
 4. Klicka på **OK**.
 5. Klicka på **OK** för att spara PSO:n.
+6. Upprepa steg 2–3 för resterande avdelningar: Ekonomi, HR, IT och Ledning.
+
+Varje avdelning får en egen PSO med eget namn, exempelvis `Anställd Ekonomi`, och kopplas till avdelningens säkerhetsgrupp. Ge varje PSO ett eget precedence-värde. Om en användare omfattas av flera PSO:er vinner den med lägst siffra.
 
 En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till OU:er.
 
