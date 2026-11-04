@@ -21,7 +21,7 @@ En PSO skapades för lagerpersonalen.
 
 1. Högerklicka på **Password Settings Container**.
 2. Välj **New → Password Settings**.
-3. Ange namn `Anställd Lager` och precedence `3`.
+3. Ange namn `Anställd Lager` och precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
 4. Ange värdena enligt tabellerna nedan.
 5. Kryssa i **Protect from accidental deletion**.
 6. Ange beskrivningen `För samtliga Lager arbetare`.
@@ -60,11 +60,36 @@ PSO:n kopplades till säkerhetsgruppen `Lager`, så att den gäller alla använd
 5. Klicka på **OK** för att spara PSO:n.
 6. Upprepa steg 2–3 för resterande avdelningar: Ekonomi, HR, IT och Ledning.
 
-Varje avdelning får en egen PSO med eget namn, exempelvis `Anställd Ekonomi`, och kopplas till avdelningens säkerhetsgrupp. Ge varje PSO ett eget precedence-värde. Om en användare omfattas av flera PSO:er vinner den med lägst siffra.
+Varje avdelning får en egen PSO med eget namn, exempelvis `Anställd Ekonomi`, och kopplas till avdelningens säkerhetsgrupp. Precedence-värdet för varje PSO står i [Precedence per avdelning](#precedence-per-avdelning).
 
 En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till OU:er.
 
 ![PSO Anställd Lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
+
+## Precedence per avdelning
+
+| Avdelning | PSO | Säkerhetsgrupp | Precedence |
+|---|---|---|---|
+| Ledning | Anställd Ledning | Ledning | 10 |
+| IT | Anställd IT | IT | 20 |
+| Ekonomi | Anställd Ekonomi | Ekonomi | 30 |
+| HR | Anställd HR | HR | 40 |
+| Lager | Anställd Lager | Lager | 50 |
+
+Lägst siffra vinner, och den striktaste policyn ska ha lägst värde. Luckorna gör att nya PSO:er kan läggas in utan att de andra behöver numreras om.
+
+Så väljer AD vilken PSO som gäller för en användare:
+
+- En PSO kopplad direkt till användaren går före gruppernas PSO:er.
+- Bland gruppernas PSO:er vinner den med lägst precedence.
+- Två PSO:er med samma värde avgörs av objektets GUID, vilket inte går att förutsäga. Därför har varje PSO ett eget värde.
+- Om ingen PSO träffar gäller Default Domain Policy.
+
+Precedence på en befintlig PSO ändras i ADAC (dubbelklicka på PSO:n i **Password Settings Container**) eller i PowerShell:
+
+```powershell
+Set-ADFineGrainedPasswordPolicy -Identity "Anställd Lager" -Precedence 50
+```
 
 ## Steg 4 – Kontrollera policyn
 
@@ -84,11 +109,29 @@ Kontrollera i PowerShell att PSO:n finns och att den gäller för en användare 
 
 Kommandot i punkt 3 ska returnera `Anställd Lager` för en användare i gruppen `Lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
 
+## Steg 5 – Byta avdelning för en användare
+
+PSO:n följer gruppmedlemskapet. När en användare byter avdelning byts gruppen, inte PSO:n.
+
+### Genomförande
+
+1. Högerklicka på användaren och välj **Properties**.
+2. Öppna fliken **Member Of**, markera den gamla säkerhetsgruppen och klicka på **Remove**.
+3. Klicka på **Add…**, ange den nya gruppen och klicka på **Check Names**.
+4. Klicka på **OK**.
+5. Flytta användarkontot till den nya avdelningens OU. Det påverkar inte PSO:n, men håller strukturen från [OU.md](OU.md).
+6. Kontrollera att rätt PSO gäller:
+   ```powershell
+   Get-ADUserResultantPasswordPolicy -Identity <användare>
+   ```
+
+Utlåsning och maxålder på lösenordet gäller direkt. Längd och komplexitet kontrolleras först vid nästa lösenordsbyte. Om användaren tillfälligt finns i båda grupperna gäller PSO:n med lägst precedence.
+
 ## Resultat
 
 Följande har genomförts:
 
-- En PSO, `Anställd Lager`, med precedence 3.
+- En PSO, `Anställd Lager`, med precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
 - Lösenordskomplexitet påslagen (CIS 1.1.5).
 - Minsta lösenordslängd 14 tecken (CIS 1.1.4).
 - Kontoutlåsning efter 5 misslyckade försök i 30 minuter (CIS 1.2.1, 1.2.2, 1.2.4).
