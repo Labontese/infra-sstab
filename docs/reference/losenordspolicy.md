@@ -66,8 +66,6 @@ En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till
 
 ![PSO Anställd Lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
 
-Skärmdumpen visar det ursprungliga värdet 3, som ändras till 50 enligt tabellen nedan.
-
 ## Precedence per avdelning
 
 | Avdelning | PSO | Säkerhetsgrupp | Precedence |
