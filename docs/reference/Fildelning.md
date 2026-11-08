@@ -178,7 +178,7 @@ avdelningars mappar.
 
 
 En vanlig anställd ska kunna läsa dokumenten men inte skapa, ändra eller ta bort filer i mappen.
-![gemensamma-nekas-ändra](../reference/bilder/active-directory/gemensamma-test.png)
+![gemensamma-nekas-ändra](../reference/bilder/active-directory/Gemensamma-test.png)
 
 
 ## Resultat
