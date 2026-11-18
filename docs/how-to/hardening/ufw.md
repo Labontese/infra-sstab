@@ -2,12 +2,12 @@
 
 Konfigurera brandväggen UFW (Uncomplicated Firewall) på SRV-02-LNX enligt minsta rättighet (least privilege): all inkommande trafik blockeras som standard, och bara den trafik servern behöver släpps igenom.
 
-SRV-02-LNX används bara för backup ([IP-adressplanen](ip-plan.md)). Den behöver därför ta emot:
+SRV-02-LNX används bara för backup ([IP-adressplanen](../../reference/ip-plan.md)). Den behöver därför ta emot:
 
 | Trafik | Port | Från | Varför |
 |---|---|---|---|
 | SSH | 22/tcp | Produktionsnätet 192.168.50.0/24 | Administration av servern |
-| SMB3 | 445/tcp | Endast SRV-01-DC, 192.168.50.10 | Windows Server Backup skriver till `\\192.168.50.50\backups` ([backup-guiden](../how-to/how-to-backup-windows-server.md)) |
+| SMB3 | 445/tcp | Endast SRV-01-DC, 192.168.50.10 | Windows Server Backup skriver till `\\192.168.50.50\backups` ([backup-guiden](../how-to-backup-windows-server.md)) |
 
 Port 137–139 (NetBIOS) öppnas inte. Backupen använder bara SMB3, som går över port 445.
 

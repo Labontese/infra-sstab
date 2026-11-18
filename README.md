@@ -44,7 +44,6 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 
 | Dokument | Innehåll |
 |---|---|
-| [Härdningsguide](docs/hardeingguide.md) | Inte påbörjad |
 | [Incident-playbook](docs/incident-playbook.md) | Inte påbörjad |
 | [CHANGELOG](CHANGELOG.md) | Vad som har ändrats och när |
 
