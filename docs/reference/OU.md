@@ -20,7 +20,7 @@ En organisationsstruktur skapas för företaget `SkamtSidoTransport` för att h�
 
 ### Genomförande
 
-1. Högerklicka på `chaslab.local`.
+1. Högerklicka på `sost.local`.
 2. Välj **New → Organizational Unit**.
 3. Ange namnet `SkamtSidoTransport`.
 4. Klicka på **OK**.
@@ -81,7 +81,7 @@ Exempel:
 - `gg-ekonomi` – Ekonomipersonal
 - `gg-lager` – Lagerpersonal
 - `gg-it` – IT-personal
-- `gg-anstallda` – Samtliga anställda
+- `gg-anställda` – Samtliga anställda
 
 Prefixet `gg-` används för att visa att gruppen är global.
 
@@ -166,7 +166,7 @@ Förkortningarna betyder:
 
 
 
-![Domänlokala säkerhetsgrupper](../reference/bilder/active-directory/Domain-local.png)
+![Domänlokala säkerhetsgrupper](../reference/bilder/active-directory/Domain-Local.png)
 
 ## Steg 7 – Lägg till användare i globala grupper
 
@@ -182,7 +182,7 @@ Efter att säkerhetsgrupperna har skapats läggs användarna till i rätt global
 6. Klicka på **Add**.
 7. Ange gruppnamnet `gg-hr`.
 8. Klicka på **Check Names → OK**.
-9. Lägg även till användaren i `gg-anstallda`.
+9. Lägg även till användaren i `gg-anställda`.
 10. Klicka på **Apply → OK**.
 
 Samma steg upprepas för resterande avdelningar med motsvarande globala grupp.
@@ -214,11 +214,11 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 | `dl-hr-rw` | `gg-hr` |
 | `dl-ledning-rw` | `gg-ledning` |
 | `dl-ekonomi-rw` | `gg-ekonomi` |
-| `dl-lager-rw` | `gg-lager` |
+| `dl-lager-rw` | `gg-lager`, `gg-ekonomi` |
 | `dl-it-rw` | `gg-it` |
 | `dl-gemensamt-ro` | `gg-anställda` |
 
-
+Enligt vår [ACL-plan](acl/acc-plan.md).
 ## Steg 9 – Kontrollera användare och grupper
 
 
@@ -228,7 +228,7 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 2. Kontrollera att användarkontona finns i rätt avdelning.
 3. Högerklicka på en användare och välj **Properties**.
 4. Öppna fliken **Member Of**.
-5. Kontrollera att användaren tillhör rätt global grupp och `gg-anstallda`.
+5. Kontrollera att användaren tillhör rätt global grupp och `gg-anställda`.
 ![Member of](../reference/bilder/active-directory/image.png)
 
 6. Gå till `Grupper → DomanLokala`.
