@@ -107,7 +107,7 @@ Förkortningarna betyder:
 
 - `rw` = Read/Write
 - `ro` = Read Only
-![Domain-local](../reference/bilder/active-directory/Domain-local.png)
+![Domain-local](../reference/bilder/active-directory/Domain-Local.png)
 
 
 ## Steg 5 – Skapa globala säkerhetsgrupper
@@ -165,7 +165,6 @@ Förkortningarna betyder:
 | `dl-gemensamt-ro` | Läsbehörighet för Gemensamt |
 
 
-
 ![Domänlokala säkerhetsgrupper](../reference/bilder/active-directory/Domain-Local.png)
 
 ## Steg 7 – Lägg till användare i globala grupper
@@ -218,7 +217,10 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 | `dl-it-rw` | `gg-it` |
 | `dl-gemensamt-ro` | `gg-anställda` |
 
+
 Enligt vår [ACL-plan](acl/acc-plan.md).
+
+
 ## Steg 9 – Kontrollera användare och grupper
 
 
@@ -229,12 +231,14 @@ Enligt vår [ACL-plan](acl/acc-plan.md).
 3. Högerklicka på en användare och välj **Properties**.
 4. Öppna fliken **Member Of**.
 5. Kontrollera att användaren tillhör rätt global grupp och `gg-anställda`.
+
 ![Member of](../reference/bilder/active-directory/image.png)
 
-6. Gå till `Grupper → DomanLokala`.
-7. Öppna exempelvis `dl-lager-rw`.
-8. Klicka på **Members**.
-9. Kontrollera att `gg-lager` finns med.
+
+7. Gå till `Grupper → DomanLokala`.
+8. Öppna exempelvis `dl-lager-rw`.
+9. Klicka på **Members**.
+10. Kontrollera att `gg-lager` finns med.
 
 
 
