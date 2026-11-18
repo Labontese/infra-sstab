@@ -1,0 +1,72 @@
+# AI-logg
+
+Gemensam logg över hur teamet använder AI i projektet (kursmål 13). Målet är att AI:ns förslag alltid verifieras mot eget testresultat eller officiell dokumentation, och att vi skriver ner när förslagen avviker.
+
+## Så här loggar du
+
+| Situation | Gör så här |
+|---|---|
+| AI användes i en PR | Fyll i AI-loggen i PR-mallen och lägg till **en rad** i översikten nedan med länk till PR:en |
+| AI användes utan PR (felsökning på en VM, frågor under labben) | Lägg till en rad i översikten **och** en post under "Poster" med [mallen](#mall) |
+| Tidigare användning som inte är loggad | Gå igenom dina gamla promptar och lägg till dem på samma sätt, med det datum de gjordes |
+
+## Vad får skickas till AI?
+
+Bedöm alltid informationen innan du skickar den.
+
+| Bedömning | Exempel |
+|---|---|
+| **Kan skickas** | Allmänna frågor ("vad gör en routetabell?"), utdrag ur offentlig leverantörsdokumentation, avidentifierade felbeskrivningar utan hemligheter, repots egen dokumentation om labbmiljön |
+| **Anonymisera eller rensa först** | Konfigurationsfiler med interna IP-adresser, resursnamn eller kontonamn, loggrader med användar-ID eller IP-adresser, opublicerad nätverksarkitektur, skärmdumpar av adminverktyg |
+| **Skicka inte** | Lösenord, API-nycklar, privata SSH-nycklar, åtkomsttokens, DSRM-lösenord, skärmdumpar med synliga inloggningsuppgifter, personuppgifter och riktiga kunddata |
+
+Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser och kontonamn räknas därför som okej att dela, men lösenord delas aldrig.
+
+## Översikt
+
+| Datum | Vem | Syfte | Verktyg | Dokumenterat i | Avvikelse? |
+|---|---|---|---|---|---|
+| 2026-10-21 | Daniel | Rita roller, behörigheter och mappstruktur som Excalidraw, och ta fram en Samba-konfiguration för behörighetsmatrisen | Claude Code (Claude Sonnet 5) | Lokala filer, inte i repot | Nej |
+| 2026-11-18 | Daniel | Granska och rätta `tutorials/001.md` | Claude Code (Claude Opus 5.5) | #25 | Ja, se [posten nedan](#2026-11-18--daniel--granskning-av-001md-och-hardening_ufwmd) |
+| 2026-11-18 | Daniel | Least privilege-regler i `hardening_ufw.md` | Claude Code (Claude Opus 5.5) | #27 | Ja, se [posten nedan](#2026-11-18--daniel--granskning-av-001md-och-hardening_ufwmd) |
+| 2026-11-18 | Daniel | Branch per uppgift i `git-arbetssatt.md` | Claude Code (Claude Opus 5.5) | #28 | Ja, namnbyte stängde #26 |
+| 2026-11-18 | Daniel | PR-mall med AI-logg | Claude Code (Claude Opus 5.5) | #29 | Nej |
+| 2026-11-18 | Daniel | Uppdatera README | Claude Code (Claude Opus 5.5) | #30 | Nej |
+| 2026-11-18 | Daniel | Flytta härdningsfilerna enligt #31 | Claude Code (Claude Opus 5.5) | #33 | Nej |
+| 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
+
+## Mall
+
+Kopiera blocket, lägg det under "Poster" och fyll i.
+
+```markdown
+### ÅÅÅÅ-MM-DD – Namn – Kort rubrik
+
+1. **Användningsfall / Syfte:** t.ex. felsökning, konfiguration, granskning av dokumentation
+2. **Verktyg & Modell:** t.ex. Claude Code (Claude Opus 5.5), ChatGPT (GPT-5), GitHub Copilot
+3. **Prompt / Metod:** vilken prompt eller arbetsmetod gav bäst resultat?
+4. **Data som matats in:** vad skickades till AI:n?
+   - [ ] Inga hemligheter (lösenord, API-nycklar, privata SSH-nycklar, åtkomsttokens)
+   - [ ] Inga personuppgifter eller riktiga kunddata
+   - [ ] Interna uppgifter (IP-adresser, kontonamn, arkitektur) är anonymiserade eller bedömda som okej att dela
+5. **Resultat & Värde:** hur mycket tid sparades? Blev kvaliteten högre?
+6. **Begränsningar & Lärdomar:** var hade AI:n fel? Vad krävde manuell korrigering?
+   - **Verifiering:** hur kontrollerade du förslaget: eget test, officiell dokumentation, reference-sida?
+   - **Avvikelser:** förslag som inte stämde med ditt eget testresultat, och vad du gjorde i stället. Skriv "Inga" om allt stämde.
+```
+
+## Poster
+
+### 2026-11-18 – Daniel – Granskning av 001.md och hardening_ufw.md
+
+1. **Användningsfall / Syfte:** Hitta och rätta fel i befintlig dokumentation, en fil i taget, med egen PR per fil
+2. **Verktyg & Modell:** Claude Code (Claude Opus 5.5)
+3. **Prompt / Metod:** "Ta en fil, hitta fel och förbättra den". Det fungerade bäst när AI:n fick korskolla mot repots egna referenssidor (`ip-plan.md`, backup-guiden) i stället för att svara ur minnet
+4. **Data som matats in:** Repots egen dokumentation och skärmdumpar från installationen
+   - [x] Inga hemligheter (lösenord, API-nycklar, privata SSH-nycklar, åtkomsttokens)
+   - [x] Inga personuppgifter eller riktiga kunddata
+   - [x] Interna uppgifter (IP-adresser, kontonamn, arkitektur) är anonymiserade eller bedömda som okej att dela
+5. **Resultat & Värde:** Tolv fel i 001.md och sju i hardening_ufw.md hittades på några minuter. Flera hade fått installationen att misslyckas: TAB i YAML, fel tjänstnamn (`samba` i stället för `smbd`) och `ufw allow samba` som inte fungerar
+6. **Begränsningar & Lärdomar:**
+   - **Verifiering:** YAML kontrollerat med `yaml.safe_load`. Länkar kontrollerade med skript. Server- eller Desktop-frågan avgjordes av författaren (Jonas), inte av AI:n
+   - **Avvikelser:** AI:n föreslog först att port 80 skulle öppnas för nginx på SRV-02. När den läste `ip-plan.md` visade det sig att SRV-02 bara är backupserver, så förslaget övergavs. AI:n trodde också att en öppen PR följer med när head-branchen byter namn. Det gjorde den inte, och #26 stängdes och fick ersättas av #27. Lärdomen står nu i `git-arbetssatt.md`

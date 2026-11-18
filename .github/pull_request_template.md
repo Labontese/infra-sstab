@@ -20,8 +20,8 @@
 - [ ] 
 
 ## AI-logg (kursmål 13)
-<!-- Fyll i om AI har använts i den här PR:en. Annars, skriv bara: "Ingen AI användes." -->
-
+<!-- Fyll i om AI har använts i den här PR:en. Annars, skriv bara: "Ingen AI användes."
+     Lägg också till en rad i docs/ai-logg.md med länk till den här PR:en. -->
 1. **Användningsfall / Syfte:** <!-- t.ex. felsökning, granskning av dokumentation, konfiguration -->
 2. **Verktyg & Modell:** <!-- t.ex. Claude Code (Claude Opus 5.5), ChatGPT (GPT-5), GitHub Copilot -->
 3. **Prompt / Metod:** <!-- Vilken prompt eller arbetsmetod gav bäst resultat? -->

@@ -55,6 +55,7 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Härdningsguide](docs/hardeingguide.md) | Inte påbörjad |
 | [Incident-playbook](docs/incident-playbook.md) | Inte påbörjad |
 | [CHANGELOG](CHANGELOG.md) | Vad som har ändrats och när |
+| [AI-logg](docs/ai-logg.md) | All AI-användning i projektet, regler för vad som får skickas till AI och mall för nya poster (kursmål 13) |
 
 Mallar för nya dokument finns som `MALL.md` i varje mapp under `docs/`.
 
