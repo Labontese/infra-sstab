@@ -81,7 +81,7 @@ Exempel:
 - `gg-ekonomi` – Ekonomipersonal
 - `gg-lager` – Lagerpersonal
 - `gg-it` – IT-personal
-- `gg-anställda` – Samtliga anställda
+- `gg-anstallda` – Samtliga anställda
 
 Prefixet `gg-` används för att visa att gruppen är global.
 
@@ -133,9 +133,9 @@ Förkortningarna betyder:
 | `gg-ekonomi` | Ekonomi |
 | `gg-lager` | Lager |
 | `gg-it` | IT |
-| `gg-anställda` | Alla anställda |
+| `gg-anstallda` | Alla anstallda |
 
-`gg-anställda` används för att samla användare från samtliga avdelningar.
+`gg-anstallda` används för att samla användare från samtliga avdelningar.
 
 ![Globala säkerhetsgrupper](../reference/bilder/active-directory/Global.png)
 
@@ -181,7 +181,7 @@ Efter att säkerhetsgrupperna har skapats läggs användarna till i rätt global
 6. Klicka på **Add**.
 7. Ange gruppnamnet `gg-hr`.
 8. Klicka på **Check Names → OK**.
-9. Lägg även till användaren i `gg-anställda`.
+9. Lägg även till användaren i `gg-anstallda`.
 10. Klicka på **Apply → OK**.
 
 Samma steg upprepas för resterande avdelningar med motsvarande globala grupp.
@@ -215,12 +215,15 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 | `dl-ekonomi-rw` | `gg-ekonomi` |
 | `dl-lager-rw` | `gg-lager`, `gg-ekonomi` |
 | `dl-it-rw` | `gg-it` |
-| `dl-gemensamt-ro` | `gg-anställda` |
+| `dl-gemensamt-ro` | `gg-anstallda` |
 
 
 Enligt vår [ACL-plan](acl/acc-plan.md).
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd575f8 (docs: åtgärda feedback på OU-dokumentation)
 ## Steg 9 – Kontrollera användare och grupper
 
 
@@ -230,7 +233,12 @@ Enligt vår [ACL-plan](acl/acc-plan.md).
 2. Kontrollera att användarkontona finns i rätt avdelning.
 3. Högerklicka på en användare och välj **Properties**.
 4. Öppna fliken **Member Of**.
+<<<<<<< HEAD
 5. Kontrollera att användaren tillhör rätt global grupp och `gg-anställda`.
+=======
+5. Kontrollera att användaren tillhör rätt global grupp och `gg-anstallda`.
+
+>>>>>>> cd575f8 (docs: åtgärda feedback på OU-dokumentation)
 
 ![Member of](../reference/bilder/active-directory/image.png)
 
