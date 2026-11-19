@@ -36,6 +36,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
 | 2026-11-19 | Daniel | Granska och godkänna #35 | Claude Code (Claude Opus 5.5) | Granskningen på #35 | Nej |
 | 2026-11-19 | Daniel | Logga AI-användning i AI-loggen och beskriva reglerna i README | Claude Code (Claude Opus 5.5) | #44 | Nej |
+| 2026-11-19 | Daniel | Hitta alla stavningar av gruppen för alla anställda och rätta `least-privilege.md` efter beslutet i #43 | Claude Code (Claude Opus 5.5) | #45 | Nej |
 
 ## Mall
 
