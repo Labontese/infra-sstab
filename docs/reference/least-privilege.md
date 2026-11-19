@@ -48,28 +48,23 @@ GPO:n ska bara vara länkad till **Domain Controllers**. Länkas den till hela d
 | 2.2.7 | Allow log on locally | Administrators, ENTERPRISE DOMAIN CONTROLLERS | Administrators, ENTERPRISE DOMAIN CONTROLLERS |
 | 2.2.9 | Allow log on through Remote Desktop Services | Administrators | Administrators |
 | 2.2.19 | Debug programs | Administrators | Administrators |
-| 2.2.24 | Deny log on locally | Ska innehålla Guests | Guests, Anställda |
-| 2.2.25 | Deny log on through Remote Desktop Services | Ska innehålla Guests | Guests, Anställda |
+| 2.2.24 | Deny log on locally | Ska innehålla Guests | Guests, gg-anstallda |
+| 2.2.25 | Deny log on through Remote Desktop Services | Ska innehålla Guests | Guests, gg-anstallda |
 | 2.2.46 | Shut down the system | Administrators | Administrators |
 
 Ta aldrig bort `Administrators` från **Allow log on locally**. Då kan ingen logga in på domänkontrollanten.
 
-## Steg 4 – Samla avdelningarna i gruppen Anställda
+## Steg 4 – Kontrollera gruppen gg-anstallda
 
-Gruppen `Anställda` innehåller alla avdelningsgrupper. Den används i Deny-reglerna i Steg 3, så att alla anställda nekas inloggning på domänkontrollanten. Ett nekande vinner alltid över ett tillstånd.
+Gruppen `gg-anstallda` skapas och fylls med alla anställda enligt [OU.md](OU.md). Den används i Deny-reglerna i Steg 3, så att alla anställda nekas inloggning på domänkontrollanten. Ett nekande vinner alltid över ett tillstånd. Namnet skrivs utan å, ä och ö för att undvika problem med svenska tecken.
 
 ### Genomförande
 
 1. Öppna **Active Directory Users and Computers**.
-2. Högerklicka på `SkamtSidoTransport` och välj **New → Group**.
-3. Ange namnet `Anställda`, välj **Global** och **Security**.
-4. Klicka på **OK**.
-5. Högerklicka på `Anställda` och välj **Properties**.
-6. Öppna fliken **Members** och klicka på **Add…**.
-7. Ange `Ledning; HR; Ekonomi; IT; Lager` och klicka på **Check Names**.
-8. Klicka på **OK**.
+2. Högerklicka på `gg-anstallda` och välj **Properties**.
+3. Öppna fliken **Members** och kontrollera att alla anställda finns med.
 
-IT-personalen har ett separat adminkonto (`adm-<namn>`) i gruppen `Administrators`. Adminkontot får inte vara med i `Anställda`, annars nekas det också inloggning. Det vanliga kontot används för det dagliga arbetet.
+IT-personalen har ett separat adminkonto (`adm-<namn>`) i gruppen `Administrators`. Adminkontot får inte vara med i `gg-anstallda`, annars nekas det också inloggning. Det vanliga kontot används för det dagliga arbetet.
 
 ## Steg 5 – Delegera användarhantering till IT
 
@@ -116,5 +111,5 @@ Följande har genomförts:
 - En GPO, `CIS - Least Privilege DC`, länkad till Domain Controllers.
 - Sju inställningar från CIS 2.2 User Rights Assignment.
 - Bara administratörer kan logga in på domänkontrollanten, ansluta datorer till domänen och stänga av servern.
-- Gruppen `Anställda` med alla avdelningsgrupper, nekad inloggning på domänkontrollanten.
+- Gruppen `gg-anstallda` med alla anställda, nekad inloggning på domänkontrollanten.
 - Delegerad användarhantering till gruppen `IT`.
