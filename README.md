@@ -63,6 +63,16 @@ Mallar för nya dokument finns som `MALL.md` i varje mapp under `docs/`.
 
 Varje uppgift görs i en egen branch från `main`, med namnet `<typ>/<kort-beskrivning>` där typen är `feature/`, `fix/` eller `docs/`. Allt går till `main` via Pull Request med review av någon annan i teamet. Se [Git-arbetssätt](docs/how-to/git-arbetssatt.md).
 
-PR-mallen i [.github/pull_request_template.md](.github/pull_request_template.md) fylls i automatiskt när du skapar en PR på GitHub. Den innehåller en AI-logg där all AI-användning dokumenteras (kursmål 13).
+PR-mallen i [.github/pull_request_template.md](.github/pull_request_template.md) fylls i automatiskt när du skapar en PR på GitHub.
+
+**AI-logg (kursmål 13):** alla i teamet loggar sin AI-användning i [AI-loggen](docs/ai-logg.md):
+
+| Situation | Gör så här |
+|---|---|
+| AI användes i en PR | Fyll i AI-loggen i PR-mallen och lägg till en rad i översikten i AI-loggen med länk till PR:en |
+| AI användes utan PR, till exempel felsökning i labben | Lägg till en rad i översikten och en post enligt mallen i AI-loggen |
+| Ingen AI användes | Skriv "Ingen AI användes." i PR-mallens AI-logg |
+
+Lösenord, nycklar och andra hemligheter skickas aldrig till AI. Reglerna för vad som får skickas står i AI-loggen.
 
 **Team:** Daniel, Jan, Jonas och Liam.
