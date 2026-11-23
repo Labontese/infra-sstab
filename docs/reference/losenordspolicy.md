@@ -21,14 +21,14 @@ En PSO skapades för lagerpersonalen.
 
 1. Högerklicka på **Password Settings Container**.
 2. Välj **New → Password Settings**.
-3. Ange namn `Anställd Lager` och precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
+3. Ange namn `pso-lager` och precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
 4. Ange värdena enligt tabellerna nedan.
 5. Kryssa i **Protect from accidental deletion**.
 6. Ange beskrivningen `För samtliga Lager arbetare`.
 
 ### Password Policy
 
-| CIS | Inställning | CIS-krav | Anställd Lager / Default Domain Policy |
+| CIS | Inställning | CIS-krav | pso-lager / Default Domain Policy |
 |---|---|---|---|
 | 1.1.1 | Enforce password history | 24 eller fler | 24 |
 | 1.1.2 | Maximum password age | 365 dagar eller färre, inte 0 | 100 dagar |
@@ -39,7 +39,7 @@ En PSO skapades för lagerpersonalen.
 
 ### Account Lockout Policy
 
-| CIS | Inställning | CIS-krav | Anställd Lager / Default Domain Policy |
+| CIS | Inställning | CIS-krav | pso-lager / Default Domain Policy |
 |---|---|---|---|
 | 1.2.1 | Account lockout duration | 15 minuter eller mer | 30 minuter |
 | 1.2.2 | Account lockout threshold | 5 försök eller färre, inte 0 | 5 |
@@ -60,21 +60,21 @@ PSO:n kopplades till säkerhetsgruppen `Lager`, så att den gäller alla använd
 5. Klicka på **OK** för att spara PSO:n.
 6. Upprepa steg 2–3 för resterande avdelningar: Ekonomi, HR, IT och Ledning.
 
-Varje avdelning får en egen PSO med eget namn, exempelvis `Anställd Ekonomi`, och kopplas till avdelningens säkerhetsgrupp. Precedence-värdet för varje PSO står i [Precedence per avdelning](#precedence-per-avdelning).
+Varje avdelning får en egen PSO med eget namn, exempelvis `pso-ekonomi`, och kopplas till avdelningens säkerhetsgrupp. Precedence-värdet för varje PSO står i [Precedence per avdelning](#precedence-per-avdelning).
 
 En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till OU:er.
 
-![PSO Anställd Lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
+![PSO ps-Lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
 
 ## Precedence per avdelning
 
 | Avdelning | PSO | Säkerhetsgrupp | Precedence |
 |---|---|---|---|
-| Ledning | Anställd Ledning | Ledning | 10 |
-| IT | Anställd IT | IT | 20 |
-| Ekonomi | Anställd Ekonomi | Ekonomi | 30 |
-| HR | Anställd HR | HR | 40 |
-| Lager | Anställd Lager | Lager | 50 |
+| Ledning | `pso-ledning` | Ledning | 10 |
+| IT |  `pso-it` | IT | 20 |
+| Ekonomi |  `pso-ekonomi` | Ekonomi | 30 |
+| HR |  `pso-hr` | HR | 40 |
+| Lager |  `pso-lager` | Lager | 50 |
 
 Lägst siffra vinner, och den striktaste policyn ska ha lägst värde. Luckorna gör att nya PSO:er kan läggas in utan att de andra behöver numreras om.
 
@@ -88,7 +88,7 @@ Så väljer AD vilken PSO som gäller för en användare:
 Precedence på en befintlig PSO ändras i ADAC (dubbelklicka på PSO:n i **Password Settings Container**) eller i PowerShell:
 
 ```powershell
-Set-ADFineGrainedPasswordPolicy -Identity "Anställd Lager" -Precedence 50
+Set-ADFineGrainedPasswordPolicy -Identity "pso-lager" -Precedence 50
 ```
 
 ## Steg 4 – Kontrollera policyn
@@ -107,7 +107,7 @@ Kontrollera i PowerShell att PSO:n finns och att den gäller för en användare 
    Get-ADUserResultantPasswordPolicy -Identity <användare>
    ```
 
-Kommandot i punkt 3 ska returnera `Anställd Lager` för en användare i gruppen `Lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
+Kommandot i punkt 3 ska returnera `pso-lager` för en användare i gruppen `Lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
 
 ## Steg 5 – Byta avdelning för en användare
 
@@ -150,7 +150,7 @@ Default Domain Policy gäller alla konton som inte omfattas av en PSO, till exem
 
 Följande har genomförts:
 
-- En PSO, `Anställd Lager`, med precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
+- En PSO, `pso-lager`, med precedence enligt [Precedence per avdelning](#precedence-per-avdelning).
 - Lösenordskomplexitet påslagen (CIS 1.1.5).
 - Minsta lösenordslängd 14 tecken (CIS 1.1.4).
 - Kontoutlåsning efter 5 misslyckade försök i 30 minuter (CIS 1.2.1, 1.2.2, 1.2.4).
