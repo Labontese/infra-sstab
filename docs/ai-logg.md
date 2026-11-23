@@ -37,6 +37,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-19 | Daniel | Granska och godkänna #35 | Claude Code (Claude Opus 5.5) | Granskningen på #35 | Nej |
 | 2026-11-19 | Daniel | Logga AI-användning i AI-loggen och beskriva reglerna i README | Claude Code (Claude Opus 5.5) | #44 | Nej |
 | 2026-11-19 | Daniel | Hitta alla stavningar av gruppen för alla anställda och rätta `least-privilege.md` efter beslutet i #43 | Claude Code (Claude Opus 5.5) | #45 | Nej |
+| 2026-11-23 | Daniel | Granska arkivskriptet i #46 och ta fram ett testat förslag till rättning | Claude Code (Claude Opus 5.5), Codex CLI (gpt-6.1-terra) | Granskningen och kommentaren på #46 | Ja, se [posten nedan](#2026-11-23--daniel--granskning-av-arkivskriptet-i-46) |
 
 ## Mall
 
@@ -73,3 +74,17 @@ Kopiera blocket, lägg det under "Poster" och fyll i.
 6. **Begränsningar & Lärdomar:**
    - **Verifiering:** YAML kontrollerat med `yaml.safe_load`. Länkar kontrollerade med skript. Server- eller Desktop-frågan avgjordes av författaren (Jonas), inte av AI:n
    - **Avvikelser:** AI:n föreslog först att port 80 skulle öppnas för nginx på SRV-02. När den läste `ip-plan.md` visade det sig att SRV-02 bara är backupserver, så förslaget övergavs. AI:n trodde också att en öppen PR följer med när head-branchen byter namn. Det gjorde den inte, och #26 stängdes och fick ersättas av #27. Lärdomen står nu i `git-arbetssatt.md`
+
+### 2026-11-23 – Daniel – Granskning av arkivskriptet i #46
+
+1. **Användningsfall / Syfte:** Granska Jonas arkivskript i #46 (issue #37) och ta fram ett rättat förslag som går att ta in med "Commit suggestion"
+2. **Verktyg & Modell:** Claude Code (Claude Opus 5.5) för granskning, tester och förslag. Codex CLI (gpt-6.1-terra) för en oberoende granskning av förslaget
+3. **Prompt / Metod:** Claude Code körde originalet och förslaget i ett påhittat träd i WSL och mätte arkivets storlek i labbet utan att skriva något där. Förslaget skickades till Codex tills det inte gav några fynd, och varje fynd prövades med ett test innan det rättades eller avvisades. Reviewen visades för Daniel innan den skickades
+4. **Data som matats in:** Repots skript och how-to-guide, sökvägar och IP-adresser från labbmiljön
+   - [x] Inga hemligheter (lösenord, API-nycklar, privata SSH-nycklar, åtkomsttokens)
+   - [x] Inga personuppgifter eller riktiga kunddata
+   - [x] Interna uppgifter (IP-adresser, kontonamn, arkitektur) är anonymiserade eller bedömda som okej att dela
+5. **Resultat & Värde:** Sex fel i originalet, alla bekräftade med test. Bland annat avslutades skriptet med kod 0 och lämnade ett trasigt arkiv när `tar` misslyckades. Mätningen visade att backupen på 14 GB blir 6,9 GB som `tar.gz`, så 30 dagars arkiv fyller en disk på 98 GB efter cirka 12 dagar. Förslaget godkändes i 19 testfall
+6. **Begränsningar & Lärdomar:**
+   - **Verifiering:** Funktionstester i WSL, shellcheck i VS Code, mätning och test av filrättigheter i labbet
+   - **Avvikelser:** Codex hittade fel i Claude Codes förslag i två av tre granskningar, till exempel att ett avbrott kunde lämna ett trasigt arkiv under rätt namn. Claude Code skrev i reviewen att `chmod 400` inte skyddar mot ransomware, medan en annan AI påstod motsatsen. Ett test i labbet visade att båda var för kategoriska: `chmod 400` stoppar konton som varken äger filen eller är root, men inte root eller ägaren. Förtydligandet lades som kommentar på #46
