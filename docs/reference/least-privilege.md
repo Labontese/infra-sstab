@@ -95,11 +95,11 @@ Gruppen `IT` får hantera användarkonton i företagets OU utan att vara med i D
 
 | Grupp | Mappar | Inloggning på DC | Ansluta datorer | Hantera användare | Lösenordspolicy |
 |---|---|---|---|---|---|
-| Ledning | RW Ledning, R Gemensamt | Nej | Nej | Nej | PSO Anställd Ledning |
-| HR | RW HR, R Gemensamt | Nej | Nej | Nej | PSO Anställd HR |
-| Ekonomi | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | PSO Anställd Ekonomi |
-| IT | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | PSO Anställd IT |
-| Lager | RW Lager, R Gemensamt | Nej | Nej | Nej | PSO Anställd Lager |
+| Ledning | RW Ledning, R Gemensamt | Nej | Nej | Nej | `pso-Ledning` |
+| HR | RW HR, R Gemensamt | Nej | Nej | Nej | `pso-hr` |
+| Ekonomi | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | `pso-ekonomi` |
+| IT | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | `pso-it` |
+| Lager | RW Lager, R Gemensamt | Nej | Nej | Nej | `pso-lager` |
 | Adminkonton (`adm-<namn>`) | – | Ja | Ja | Ja | Default Domain Policy |
 
 Mapparna delas från en Windows-server. Vilken server är inte bestämt än. Lösenordspolicyerna beskrivs i [losenordspolicy.md](losenordspolicy.md).
