@@ -34,6 +34,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-18 | Daniel | Uppdatera README | Claude Code (Claude Opus 5.5) | #30 | Nej |
 | 2026-11-18 | Daniel | Flytta härdningsfilerna enligt #31 | Claude Code (Claude Opus 5.5) | #33 | Nej |
 | 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
+| 2026-11-18 | Liam | Förbättra how-to-backup-windows-server.md (backup per avdelning till Samba) och ta fram färdiga kommandon | Claude (claude.ai, Claude Sonnet 5.5) | #35 | Ja, två förslag togs bort, se posten nedan |
 | 2026-11-19 | Daniel | Granska och godkänna #35 | Claude Code (Claude Opus 5.5) | Granskningen på #35 | Nej |
 | 2026-11-19 | Daniel | Logga AI-användning i AI-loggen och beskriva reglerna i README | Claude Code (Claude Opus 5.5) | #44 | Nej |
 | 2026-11-19 | Daniel | Hitta alla stavningar av gruppen för alla anställda och rätta `least-privilege.md` efter beslutet i #43 | Claude Code (Claude Opus 5.5) | #45 | Nej |
@@ -74,6 +75,21 @@ Kopiera blocket, lägg det under "Poster" och fyll i.
 6. **Begränsningar & Lärdomar:**
    - **Verifiering:** YAML kontrollerat med `yaml.safe_load`. Länkar kontrollerade med skript. Server- eller Desktop-frågan avgjordes av författaren (Jonas), inte av AI:n
    - **Avvikelser:** AI:n föreslog först att port 80 skulle öppnas för nginx på SRV-02. När den läste `ip-plan.md` visade det sig att SRV-02 bara är backupserver, så förslaget övergavs. AI:n trodde också att en öppen PR följer med när head-branchen byter namn. Det gjorde den inte, och #26 stängdes och fick ersättas av #27. Lärdomen står nu i `git-arbetssatt.md`
+
+### 2026-11-18 – Liam – Förbättring av backupguide per avdelning
+
+1. **Användningsfall / Syfte:** Granska och förbättra guiden för separata backupjobb per avdelning (Task Scheduler + `wbadmin start backup` mot en Samba-delning på Ubuntu) och ta fram färdiga kommandon, test- och återställningssteg och felsökning. Hjälp med git-flödet inför PR:en (merge i vim) ingick som sidoärende
+2. **Verktyg & Modell:** Claude (claude.ai, Claude Sonnet 5.5)
+3. **Prompt / Metod:** Hela den ursprungliga guiden och lektionstexten klistrades in med uppdraget att förbättra guiden och ge färdiga kommandon inför en PR. AI:n kontrollerade kommandosyntaxen mot Microsoft Learn i stället för att svara ur minnet, och det avslöjade att dokumentationen beskriver `-user`/`-password` för backup till fjärrmapp medan originalguiden använde `cmdkey`. Guiden ändrades därefter i omgångar
+4. **Data som matats in:** Guidetexten med mappstruktur, avdelningsnamn, den interna IP-adressen `192.168.50.50` och kontonamnet `backupuser`, samt lektionstexten
+   - [x] Inga hemligheter (lösenord, API-nycklar, privata SSH-nycklar, åtkomsttokens)
+   - [x] Inga personuppgifter eller riktiga kunddata
+   - [x] Interna uppgifter (IP-adresser, kontonamn, arkitektur) är anonymiserade eller bedömda som okej att dela
+5. **Resultat & Värde:** Guiden fick färdiga kommandon för alla sex avdelningar, kontroll av nätverk och funktion, test- och återställningssteg, en felsökningstabell och en säkerhetsnotering om att backuperna blir läsbara för alla med åtkomst till delningen. AI:n flaggade också att `cmdkey` kanske inte fungerar i schemalagda jobb. Tidsbesparingen är inte uppmätt
+6. **Begränsningar & Lärdomar:**
+   - **Verifiering:** Syntaxen kontrollerades mot Microsoft Learn (`-include` med mappar, `-vssCopy`, att `enable backup` påverkar det dagliga schemat och att en ny backup till samma fjärrmapp skriver över den förra). AI:n kan inte köra kommandon i vår miljö, och guiden är ännu inte körd på servern: `cmdkey` i ett schemalagt jobb, körning med utloggat konto och återställningskommandot är otestade (Uppdate: testat i efterhand)
+
+   - **Avvikelser:** Inga testavvikelser hittills, eftersom inget är testat på servern. Två AI-förslag valdes bort: ett PowerShell-skript som skapar alla sex jobb (jobben skapas i stället manuellt i Task Scheduler med färdiga argument) och en mätning av mapparnas storlek mot backupdiskens storlek (ersatt av en valfri kontroll av ledigt utrymme med `df -h`). Om `cmdkey` visar sig inte fungera i det schemalagda jobbet läggs det till här, tillsammans med vad som användes i stället 
 
 ### 2026-11-23 – Daniel – Granskning av arkivskriptet i #46
 
