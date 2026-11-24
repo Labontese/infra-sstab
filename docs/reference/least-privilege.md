@@ -68,12 +68,12 @@ IT-personalen har ett separat adminkonto (`adm-<namn>`) i gruppen `Administrator
 
 ## Steg 5 – Delegera användarhantering till IT
 
-Gruppen `IT` får hantera användarkonton i företagets OU utan att vara med i Domain Admins.
+Gruppen `gg-it` får hantera användarkonton i företagets OU utan att vara med i Domain Admins.
 
 ### Genomförande
 
 1. Högerklicka på `SkamtSidoTransport` och välj **Delegate Control…**.
-2. Klicka på **Next**, sedan **Add…**, ange `IT` och klicka på **Check Names**.
+2. Klicka på **Next**, sedan **Add…**, ange `gg-it` och klicka på **Check Names**.
 3. Klicka på **OK** och **Next**.
 4. Kryssa i **Create, delete, and manage user accounts** och **Reset user passwords and force password change at next logon**.
 5. Klicka på **Next → Finish**.
@@ -88,18 +88,18 @@ Gruppen `IT` får hantera användarkonton i företagets OU utan att vara med i D
    gpresult /r /scope computer
    ```
 2. Kontrollera att `CIS - Least Privilege DC` finns under **Applied Group Policy Objects**.
-3. Försök logga in på domänkontrollanten med en vanlig användare, till exempel en i `Lager`. Inloggningen ska nekas.
+3. Försök logga in på domänkontrollanten med en vanlig användare, till exempel en i `gg-lager`. Inloggningen ska nekas.
 4. Kontrollera att ingen vanlig användare är med i **Domain Admins** (Properties → **Members**).
 
 ## Behörighet per grupp
 
 | Grupp | Mappar | Inloggning på DC | Ansluta datorer | Hantera användare | Lösenordspolicy |
 |---|---|---|---|---|---|
-| Ledning | RW Ledning, R Gemensamt | Nej | Nej | Nej | `pso-Ledning` |
-| HR | RW HR, R Gemensamt | Nej | Nej | Nej | `pso-hr` |
-| Ekonomi | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | `pso-ekonomi` |
-| IT | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | `pso-it` |
-| Lager | RW Lager, R Gemensamt | Nej | Nej | Nej | `pso-lager` |
+| `gg-ledning` | RW Ledning, R Gemensamt | Nej | Nej | Nej | `pso-ledning` |
+| `gg-hr` | RW HR, R Gemensamt | Nej | Nej | Nej | `pso-hr` |
+| `gg-ekonomi` | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | `pso-ekonomi` |
+| `gg-it` | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | `pso-it` |
+| `gg-lager` | RW Lager, R Gemensamt | Nej | Nej | Nej | `pso-lager` |
 | Adminkonton (`adm-<namn>`) | – | Ja | Ja | Ja | Default Domain Policy |
 
 Mapparna delas från en Windows-server. Vilken server är inte bestämt än. Lösenordspolicyerna beskrivs i [losenordspolicy.md](losenordspolicy.md).
@@ -112,4 +112,4 @@ Följande har genomförts:
 - Sju inställningar från CIS 2.2 User Rights Assignment.
 - Bara administratörer kan logga in på domänkontrollanten, ansluta datorer till domänen och stänga av servern.
 - Gruppen `gg-anstallda` med alla anställda, nekad inloggning på domänkontrollanten.
-- Delegerad användarhantering till gruppen `IT`.
+- Delegerad användarhantering till gruppen `gg-it`.
