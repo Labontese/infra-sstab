@@ -1,9 +1,8 @@
-
 # Active Directory – Användare och säkerhetsgrupper
 
 ## Steg 1 – Öppna Active Directory
 
-Active Directory Users and Computers (ADUC) används för att administrera användarkonton, säkerhetsgrupper och organisationsenheter (OU).
+Active Directory Users and Computers (ADUC) används för att administrera användarkonton, grupper och organisationsenheter (OU).
 
 ### Genomförande
 
@@ -14,28 +13,30 @@ Active Directory Users and Computers (ADUC) används för att administrera anvä
 
 Här visas domänens användare, grupper och organisationsenheter.
 
+Skärmbilderna visar hur ADUC ser ut och kan innehålla andra namn. Följ domänen `sost.local` och gruppnamnen i tabellerna när du genomför stegen.
+
 ## Steg 2 – Skapa organisationsenheter (OU)
 
 En organisationsstruktur skapas för företaget `SkamtSidoTransport` för att hålla användare, grupper och datorer organiserade.
 
 ### Genomförande
 
-1. Högerklicka på `chaslab.local`.
+1. Högerklicka på `sost.local`.
 2. Välj **New → Organizational Unit**.
 3. Ange namnet `SkamtSidoTransport`.
 4. Klicka på **OK**.
 5. Högerklicka på `SkamtSidoTransport`.
-6. Skapa följande OU:er:
+6. Skapa var och en av följande OU:er via **New → Organizational Unit** på `SkamtSidoTransport`:
    - `Användare`
    - `Grupper`
    - `Datorer`
-7. Under `Användare` skapas:
+7. Högerklicka på `Användare` och välj **New → Organizational Unit** för var och en av följande OU:er:
    - `HR`
    - `Ledning`
    - `Ekonomi`
    - `Lager`
    - `IT`
-8. Under `Grupper` skapas:
+8. Högerklicka på `Grupper` och välj **New → Organizational Unit** för var och en av följande OU:er:
    - `Globala`
    - `DomanLokala`
 
@@ -56,9 +57,9 @@ Testanvändare skapas för företagets olika avdelningar.
 3. Öppna exempelvis OU:n `HR`.
 4. Högerklicka och välj **New → User**.
 5. Ange användarens förnamn och efternamn.
-6. Ange ett användarnamn för inloggning.
+6. Kontrollera **Full name** och ange användarnamnet i **User logon name**.
 7. Klicka på **Next**.
-8. Ange ett lösenord och välj lämpliga lösenordsinställningar.
+8. Ange ett lösenord som följer [lösenordspolicyn](losenordspolicy.md) i **Password** och upprepa det i **Confirm password**. Välj lämpliga lösenordsinställningar för testkontot.
 9. Klicka på **Next → Finish**.
 10. Upprepa för resterande avdelningar.
 
@@ -68,7 +69,9 @@ Varje användarkonto placeras i den OU som motsvarar användarens avdelning.
 
 ## Steg 4 – Globala och domänlokala säkerhetsgrupper
 
-Två typer av säkerhetsgrupper används för att skilja användarnas avdelningstillhörighet från behörighetshanteringen.
+Vi använder säkerhetsgrupper med två olika gruppomfattningar, **Global** och **Domain local**. Det skiljer användarnas avdelningstillhörighet från behörighetshanteringen.
+
+Egna AD-säkerhetsgrupper namnges utan `å`, `ä` och `ö`. Använd samma gruppnamn i [dokumentationen för minsta rättighet](least-privilege.md).
 
 ### Globala grupper (GG)
 
@@ -107,7 +110,7 @@ Förkortningarna betyder:
 
 - `rw` = Read/Write
 - `ro` = Read Only
-![Domain-local](../reference/bilder/active-directory/Domain-local.png)
+![Domain-local](../reference/bilder/active-directory/Domain-Local.png)
 
 
 ## Steg 5 – Skapa globala säkerhetsgrupper
@@ -133,9 +136,9 @@ Förkortningarna betyder:
 | `gg-ekonomi` | Ekonomi |
 | `gg-lager` | Lager |
 | `gg-it` | IT |
-| `gg-anställda` | Alla anställda |
+| `gg-anstallda` | Alla anställda |
 
-`gg-anställda` används för att samla användare från samtliga avdelningar.
+`gg-anstallda` används för att samla användare från samtliga avdelningar.
 
 ![Globala säkerhetsgrupper](../reference/bilder/active-directory/Global.png)
 
@@ -160,13 +163,12 @@ Förkortningarna betyder:
 | `dl-hr-rw` | Läs- och skrivbehörighet för HR |
 | `dl-ledning-rw` | Läs- och skrivbehörighet för Ledning |
 | `dl-ekonomi-rw` | Läs- och skrivbehörighet för Ekonomi |
-| `dl-lager-rw` | Läs- och skrivbehörighet för Lager |
+| `dl-lager-rw` | Läs- och skrivbehörighet till mappen Lager |
 | `dl-it-rw` | Läs- och skrivbehörighet för IT |
 | `dl-gemensamt-ro` | Läsbehörighet för Gemensamt |
 
 
-
-![Domänlokala säkerhetsgrupper](../reference/bilder/active-directory/Domain-local.png)
+![Domänlokala säkerhetsgrupper](../reference/bilder/active-directory/Domain-Local.png)
 
 ## Steg 7 – Lägg till användare i globala grupper
 
@@ -182,7 +184,7 @@ Efter att säkerhetsgrupperna har skapats läggs användarna till i rätt global
 6. Klicka på **Add**.
 7. Ange gruppnamnet `gg-hr`.
 8. Klicka på **Check Names → OK**.
-9. Lägg även till användaren i `gg-anstallda`.
+9. Klicka på **Add** igen, ange `gg-anstallda` och klicka på **Check Names → OK**.
 10. Klicka på **Apply → OK**.
 
 Samma steg upprepas för resterande avdelningar med motsvarande globala grupp.
@@ -203,7 +205,7 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 6. Ange `gg-hr`.
 7. Klicka på **Check Names → OK**.
 8. Klicka på **Apply → OK**.
-9. Upprepa för resterande grupper.
+9. Upprepa punkterna 3–8 för de övriga domänlokala grupperna enligt tabellen [Gruppkopplingar](#gruppkopplingar). Om en domänlokal grupp har flera globala grupper, lägg till var och en via **Add** innan du klickar på **Apply → OK**.
 
 ![dl-add-gg-](../reference/bilder/active-directory/dl-add-gg-.png)
 
@@ -214,33 +216,35 @@ Detta gör det enklare att administrera användarnas grupptillhörighet.
 | `dl-hr-rw` | `gg-hr` |
 | `dl-ledning-rw` | `gg-ledning` |
 | `dl-ekonomi-rw` | `gg-ekonomi` |
-| `dl-lager-rw` | `gg-lager` |
+| `dl-lager-rw` | `gg-lager`, `gg-ekonomi` |
 | `dl-it-rw` | `gg-it` |
-| `dl-gemensamt-ro` | `gg-anställda` |
+| `dl-gemensamt-ro` | `gg-anstallda` |
+
+
+Enligt vår [ACL-plan](acl/acc-plan.md).
+
 
 
 ## Steg 9 – Kontrollera användare och grupper
 
-
 ### Genomförande
 
-1. Öppna  OU i Active Directory.
-2. Kontrollera att användarkontona finns i rätt avdelning.
+1. Öppna Active Directory Users and Computers.
+2. Gå till `sost.local → SkamtSidoTransport → Användare → <avdelning>` och kontrollera att användarkontona finns i rätt OU.
 3. Högerklicka på en användare och välj **Properties**.
 4. Öppna fliken **Member Of**.
 5. Kontrollera att användaren tillhör rätt global grupp och `gg-anstallda`.
-![Member of](../reference/bilder/active-directory/image.png)
 
-6. Gå till `Grupper → DomanLokala`.
+   ![Member of](../reference/bilder/active-directory/image.png)
+
+6. Gå till `SkamtSidoTransport → Grupper → DomanLokala`.
 7. Öppna exempelvis `dl-lager-rw`.
 8. Klicka på **Members**.
-9. Kontrollera att `gg-lager` finns med.
-
-
+9. Kontrollera att både `gg-lager` och `gg-ekonomi` finns med enligt ACL-planen.
 
 ## Resultat
 
-
+När guiden är genomförd ska följande stämma.
 
 - En OU-struktur för företagets avdelningar.
 - Testanvändare placerade i rätt OU.

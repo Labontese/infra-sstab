@@ -32,6 +32,9 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Git-arbetssätt](docs/how-to/git-arbetssatt.md) | En branch per uppgift, PR med peer review och vanliga git/gh-kommandon |
 | [Backup av SRV-01-DC](docs/how-to/how-to-backup-windows-server.md) | Säkerhetskopiera SRV-01-DC till SRV-02-LNX med Windows Server Backup och återställa |
 | [Felsök nginx](docs/how-to/felsok-nginx.md) | Status, konfigurationstest, brandvägg och loggar när webbsidan inte går att nå |
+| [Härdning: brandvägg UFW](docs/how-to/hardening/ufw.md) | UFW-regler på SRV-02-LNX: SSH från produktionsnätet, SMB3 bara från SRV-01-DC |
+| [Härdning: SSH](docs/how-to/hardening/ssh.md) | Inställningar i `sshd_config` mot brute force och obehörig inloggning |
+| [Härdning: automatiska säkerhetsuppdateringar](docs/how-to/hardening/autouppdateringar.md) | `unattended-upgrades` på Ubuntu Server |
 
 ### Referens – exakta fakta
 
@@ -43,16 +46,12 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Lösenords- och utlåsningspolicy](docs/reference/losenordspolicy.md) | Default Domain Policy och PSO:er per avdelning enligt CIS Benchmark kapitel 1 |
 | [Minsta rättighet](docs/reference/least-privilege.md) | Rättigheter på domänkontrollanten enligt CIS kapitel 2.2 och behörighet per grupp |
 | [Fildelning på Windows Server](docs/reference/Fildelning.md) | Mappar och behörigheter för avdelningarnas fildelning enligt least privilege |
-| [Brandvägg UFW](docs/reference/hardening_ufw.md) | UFW-regler på SRV-02-LNX: SSH från produktionsnätet, SMB3 bara från SRV-01-DC |
-| [SSH-härdning](docs/reference/hardening_sshd_config.md) | Inställningar i `sshd_config` mot brute force och obehörig inloggning |
-| [Automatiska säkerhetsuppdateringar](docs/reference/hardening_autoupd.md) | `unattended-upgrades` på Ubuntu Server |
 | [nginx-sökvägar](docs/reference/nginx-sokvagar.md) | Var nginx har konfiguration, webbfiler och loggar |
 
 ### Övrigt
 
 | Dokument | Innehåll |
 |---|---|
-| [Härdningsguide](docs/hardeingguide.md) | Inte påbörjad |
 | [Incident-playbook](docs/incident-playbook.md) | Inte påbörjad |
 | [CHANGELOG](CHANGELOG.md) | Vad som har ändrats och när |
 | [AI-logg](docs/ai-logg.md) | All AI-användning i projektet, regler för vad som får skickas till AI och mall för nya poster (kursmål 13) |
