@@ -35,6 +35,8 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-18 | Daniel | Flytta härdningsfilerna enligt #31 | Claude Code (Claude Opus 5.5) | #33 | Nej |
 | 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
 | 2026-11-18 | Liam | Förbättra how-to-backup-windows-server.md (backup per avdelning till Samba) och ta fram färdiga kommandon | Claude (claude.ai, Claude Sonnet 5.5) | #35 | Ja, två förslag togs bort, se posten nedan |
+| 2026-11-23 | Jonas | Strukturera om driftsättningsguide Windows Server 2025 (002.md), rensa dubbletter och lägga till avslutning | Google Antigravity (Gemini / Claude Sonnet) | #32 | Nej |
+| 2026-11-23 | Jonas | Granska och uppdatera arkiveringsskript för Samba-backup (`arkivera-backup.sh`) | Google Antigravity (Claude Sonnet) | #46 | Nej |
 ## Mall
 
 Kopiera blocket, lägg det under "Poster" och fyll i.
