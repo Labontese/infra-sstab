@@ -35,6 +35,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-18 | Daniel | Flytta härdningsfilerna enligt #31 | Claude Code (Claude Opus 5.5) | #33 | Nej |
 | 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
 | 2026-11-18 | Liam | Förbättra how-to-backup-windows-server.md (backup per avdelning till Samba) och ta fram färdiga kommandon | Claude (claude.ai, Claude Sonnet 5.5) | #35 | Ja, två förslag togs bort, se posten nedan |
+| 2026-11-23 | Jan | Granska arbetsstegen i `OU.md` och få förslag på tydligare instruktioner och en kontroll av gruppnamnet i AD | ChatGPT | [PR #34](https://github.com/Labontese/infra-sstab/pull/34) | Ja, förslag som ändrade guidens upplägg valdes bort | 
 ## Mall
 
 Kopiera blocket, lägg det under "Poster" och fyll i.
