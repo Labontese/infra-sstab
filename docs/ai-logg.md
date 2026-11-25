@@ -38,6 +38,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-23 | Jonas | Strukturera om driftsättningsguide Windows Server 2025 (002.md), rensa dubbletter och lägga till avslutning | Google Antigravity (Gemini / Claude Sonnet) | #32 | Nej |
 | 2026-11-23 | Jonas | Granska och uppdatera arkiveringsskript för Samba-backup (`arkivera-backup.sh`) | Google Antigravity (Claude Sonnet) | #46 | Nej |
 | 2026-11-25 | Liam | Skapat mall för DHCP Återställning som sedan skrevs i manuellt| Claude Sonnet 5| #39 | Nej |
+| 2026-11-25 | Liam | Skapat mall för backup rutinen som sedan skrevs i manuellt| Claude Sonnet 5| #53 | Nej |
 ## Mall
 
 Kopiera blocket, lägg det under "Poster" och fyll i.
