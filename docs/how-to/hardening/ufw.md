@@ -2,11 +2,12 @@
 
 Konfigurera brandväggen UFW (Uncomplicated Firewall) på SRV-02-LNX enligt minsta rättighet (least privilege): all inkommande trafik blockeras som standard, och bara den trafik servern behöver släpps igenom.
 
-SRV-02-LNX används bara för backup ([IP-adressplanen](../../reference/ip-plan.md)). Den behöver därför ta emot:
+SRV-02-LNX används som webbserver (nginx) och backupserver ([IP-adressplanen](../../reference/ip-plan.md)). Den behöver därför ta emot:
 
 | Trafik | Port | Från | Varför |
 |---|---|---|---|
 | SSH | 22/tcp | Produktionsnätet 192.168.50.0/24 | Administration av servern |
+| HTTP | 80/tcp | Produktionsnätet 192.168.50.0/24 | Webbplats (Team Banananans) |
 | SMB3 | 445/tcp | Endast SRV-01-DC, 192.168.50.10 | Windows Server Backup skriver till `\\192.168.50.50\backups` ([backup-guiden](../how-to-backup-windows-server.md)) |
 
 Port 137–139 (NetBIOS) öppnas inte. Backupen använder bara SMB3, som går över port 445.
@@ -37,6 +38,7 @@ sudo ufw default allow outgoing
 
 ```
 sudo ufw allow from 192.168.50.0/24 to any port 22 proto tcp comment 'SSH från produktionsnätet'
+sudo ufw allow from 192.168.50.0/24 to any port 80 proto tcp comment 'HTTP från produktionsnätet'
 sudo ufw allow from 192.168.50.10 to any port 445 proto tcp comment 'SMB3-backup från SRV-01-DC'
 ```
 
@@ -56,9 +58,10 @@ Visa reglerna:
 sudo ufw status verbose
 ```
 
-Resultatet ska visa `Default: deny (incoming), allow (outgoing)` och exakt de två reglerna:
+Resultatet ska visa `Default: deny (incoming), allow (outgoing)` och exakt de tre reglerna:
 ```
 22/tcp                     ALLOW IN    192.168.50.0/24            # SSH från produktionsnätet
+80/tcp                     ALLOW IN    192.168.50.0/24            # HTTP från produktionsnätet
 445/tcp                    ALLOW IN    192.168.50.10              # SMB3-backup från SRV-01-DC
 ```
 

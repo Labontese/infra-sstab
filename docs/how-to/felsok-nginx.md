@@ -25,17 +25,13 @@ sudo systemctl restart nginx
 sudo ufw status
 ```
 
-Om UFW är aktivt och HTTP saknas i listan blockeras sidan. Öppna port 80 (HTTP):
+Om UFW är aktivt och HTTP saknas i listan blockeras sidan. Öppna port 80 (HTTP) för produktionsnätet enligt [härdningsguiden](hardening/ufw.md):
 
 ```
-sudo ufw allow 'Nginx HTTP'
+sudo ufw allow from 192.168.50.0/24 to any port 80 proto tcp comment 'HTTP från produktionsnätet'
 ```
 
-Ska HTTPS också användas, öppna port 80 och 443:
-
-```
-sudo ufw allow 'Nginx Full'
-```
+Undvik att köra `sudo ufw allow 'Nginx HTTP'`, eftersom det öppnar porten för alla nätverk och bryter mot minsta rättighet (least privilege).
 
 ## Läs loggarna
 

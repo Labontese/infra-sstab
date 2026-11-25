@@ -7,7 +7,7 @@ Driftdokumentation för **Skämt & Sido Transport AB**, skoluppgiften Boiler Roo
 | Server | Roll | IP-adress |
 |---|---|---|
 | SRV-01-DC | Windows Server 2025: AD DS, DNS, DHCP | 192.168.50.10 |
-| SRV-02-LNX | Ubuntu Server: backup | 192.168.50.50 |
+| SRV-02-LNX | Ubuntu Server: webbserver (nginx) och backup (Samba) | 192.168.50.50 |
 | FW01 | Brandvägg och gateway | 192.168.50.1 / 192.168.99.1 |
 | SW01 | Core-switch | 192.168.99.2 |
 

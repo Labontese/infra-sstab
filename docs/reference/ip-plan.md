@@ -35,7 +35,7 @@ Ingen DHCP i managementnätet – samtliga adresser statiska.
 | `SW-01` | SW01 | Management | 192.168.99.2 | Core-switch, managementgränssnitt | — |
 | `SRV-01` | SRV-01-DC | Produktion | 192.168.50.10 | Active Directory (AD DS), DNS, DHCP | — |
 | `SRV-01` | SRV-01-DC (iDRAC) | Management | 192.168.99.10 | Out-of-band hårdvarustyrning (BMC) | — |
-| `SRV-02` | SRV-02-LNX | Produktion | 192.168.50.50 | Backup | Redan konfigurerad, se `tutorials/001.md` |
+| `SRV-02` | SRV-02-LNX | Produktion | 192.168.50.50 | Webbserver (nginx) och backup (Samba) | Redan konfigurerad, se `tutorials/001.md` |
 | `SRV-02` | SRV-02-LNX (iDRAC) | Management | 192.168.99.20 | Out-of-band hårdvarustyrning (BMC) | — |
 | `PWR-01` | UPS01 | – | – | Ingen nätverksadress (lokal strömförsörjning) | — |
 
