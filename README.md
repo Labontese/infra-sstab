@@ -35,6 +35,7 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Härdning: brandvägg UFW](docs/how-to/hardening/ufw.md) | UFW-regler på SRV-02-LNX: SSH från produktionsnätet, SMB3 bara från SRV-01-DC |
 | [Härdning: SSH](docs/how-to/hardening/ssh.md) | Inställningar i `sshd_config` mot brute force och obehörig inloggning |
 | [Härdning: automatiska säkerhetsuppdateringar](docs/how-to/hardening/autouppdateringar.md) | `unattended-upgrades` på Ubuntu Server |
+| [Härdning: Windows-brandväggen](docs/how-to/hardening/windows-brandvagg.md) | Brandväggen på SRV-01-DC: profiler enligt CIS via GPO, regler bara från produktionsnätet |
 
 ### Referens – exakta fakta
 

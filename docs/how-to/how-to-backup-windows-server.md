@@ -256,4 +256,4 @@ Kör i PowerShell som administratör på SRV-01-DC.
 | Vad | Varför |
 |---|---|
 | Namnmappningen för UPN i Samba | Att Samba nekar UPN utan den är provat. Att mappningen löser det är inte provat |
-| Återställning av System State (AD) | Kräver omstart i DSRM. 
+| Återställning av System State (AD) | Kräver omstart i DSRM. Testas i [#36](https://github.com/Labontese/infra-sstab/issues/36) |
