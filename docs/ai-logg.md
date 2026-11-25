@@ -43,6 +43,8 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-23 | Daniel | Granska arkivskriptet i #46 och ta fram ett testat förslag till rättning | Claude Code (Claude Opus 5.5), Codex CLI (gpt-6.1-terra) | Granskningen och kommentaren på #46 | Ja, se [posten nedan](#2026-11-23--daniel--granskning-av-arkivskriptet-i-46) |
 | 2026-11-23 | Daniel | Härda Windows-brandväggen på SRV-01-DC enligt CIS avsnitt 9, testa i labbet och skriva guiden | Claude Code (Claude Opus 5.5), Codex CLI (gpt-6.1-terra) | #58 | Ja: NetBIOS 137–139 rättat till 139, loggmappen saknades, Modify i stället för FullControl |
 | 2026-11-24 | Daniel | Skriva klart den avklippta raden i backupguiden | Claude Code (Claude Opus 5.5) | #61 | Ja: en kort hänvisning till #36 blev ingen länk och ersattes med en hel länk |
+| 2026-11-25 | Liam | Skapat mall för DHCP Återställning som sedan skrevs i manuellt| Claude Sonnet 5| #39 | Nej |
+| 2026-11-25 | Liam | Skapat mall för backup rutinen som sedan skrevs i manuellt| Claude Sonnet 5| #53 | Nej |
 | 2026-11-25 | Daniel | Granska och godkänna #60, #62, #63 och #68 | Claude Code (Claude Opus 5.5) | Granskningarna | Nej |
 | 2026-11-25 | Daniel | Startsida för nginx på SRV-02-LNX | Claude Code (Claude Opus 5.5) | #65 | Ja: rubriken kunde inte radbrytas på smala skärmar |
 | 2026-11-25 | Daniel | Skript för AD, fildelning, minsta rättighet och lösenordspolicy ur labbskripten | Claude Code (Claude Opus 5.5) | #70 | Ja: medlemskapet i `gg-anstallda` rättat efter `OU.md` |
