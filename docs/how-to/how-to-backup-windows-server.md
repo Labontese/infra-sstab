@@ -200,6 +200,57 @@ C:\Fildelning\HR BUILTIN\Administrators:(F)
 
 Versionen i `wbadmin get versions` anges i UTC: `09:41` är 10:41 svensk tid.
 
+## 5. Återställa DHCP
+
+DHCP-databasen finns inte i System State. Den ligger i mappen
+`C:\Windows\System32\dhcp\backup`, som tas med i backupen. Återställningen
+görs i två led: först hämtas mappen från backupen, sedan läser DHCP-servern
+in den.
+
+Kör i PowerShell som administratör på SRV-01-DC.
+
+1. Ta reda på vilken version som ska återställas. Versionen anges i UTC:
+
+   ```powershell
+   wbadmin get versions -backupTarget:\\192.168.50.50\backups
+   ```
+
+2. Återställ mappen från backupen till sin ursprungliga plats:
+
+   ```powershell
+   wbadmin start recovery 
+       -version:<versionen från steg 1> 
+       -itemType:File 
+       "-items:C:\Windows\System32\dhcp\backup" 
+       -recursive 
+       -backupTarget:\\192.168.50.50\backups 
+       -user:backupuser@sost.local 
+       -quiet
+   ```
+
+   WSB frågar efter lösenordet om `-password` utelämnas. Använd
+   `-overwrite:overwrite` om mappen finns kvar och ska skrivas över.
+
+3. Läs in den återställda säkerhetskopian i DHCP-servern:
+
+   ```powershell
+   Restore-DhcpServer -Path C:\Windows\System32\dhcp\backup
+   ```
+
+4. Starta om DHCP-tjänsten:
+
+   ```powershell
+   Restart-Service DHCPServer
+   ```
+
+5. Kontrollera att scope, reservationer och alternativ finns:
+
+   ```powershell
+   Get-DhcpServerv4Scope
+   Get-DhcpServerv4Reservation -ScopeId <scope>
+   Get-DhcpServerv4OptionValue -ScopeId <scope>
+   ```
+
 ### Inte ännu verifierat
 
 | Vad | Varför |
