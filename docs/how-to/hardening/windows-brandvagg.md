@@ -217,8 +217,14 @@ SRV-01-DC 2026-11-23, före och efter en omstart:
 - `domainfw.log` loggade blockerade anslutningar, till exempel mot port 139 från SRV-02-LNX. Loggarna kom igång efter steget under [Felsökning](#felsökning) och fanns kvar efter omstarten.
 - `dcdiag /q` visade bara händelser från uppstarten, samma som före ändringen.
 
+Från en Windows 11-klient i produktionsnätet 2026-11-25:
+- Klienten fick sin adress från DHCP på SRV-01-DC och anslöts till domänen. Nätverkskortet blev `DomainAuthenticated`.
+- DNS, DC-lokaliseringen (CLDAP, 389/udp), den säkra kanalen och tiden (123/udp) fungerade.
+- Grupprinciperna hämtades från SRV-01-DC, och klienten fick Kerberos-biljetter för LDAP, SMB och Netlogon.
+- En användare i `gg-lager` kunde logga in, skriva i Lager och läsa Gemensamma dokument, men nekades Ekonomi och att skriva i Gemensamma dokument. Nekandena kom från behörigheterna, inte från brandväggen.
+- Samma portar som från SRV-02-LNX var öppna, och 139 och Spoolers port var stängda.
+- `domainfw.log` blockerade inget som klienten behövde. Det som blockerades var 139, Spoolers port, NetBIOS-namnfrågor (137/udp) och LLMNR (5355/udp).
+
 ## Inte verifierat
 
-Testmiljön har inga Windows-klienter. Därför är det inte provat att ansluta en klient till domänen, logga in, hämta grupprinciper eller få en adress från DHCP. Reglerna för dem är begränsade till produktionsnätet, men bara TCP-portarna och DNS är testade, inte Kerberos och tid över udp.
-
-Felsökningen av ett nätverkskort som stannar på Public och stegen under Ångra är inte provade.
+Kerberos över udp är inte provat, eftersom klienten använde 88/tcp. Felsökningen av ett nätverkskort som stannar på Public och stegen under Ångra är inte heller provade.
