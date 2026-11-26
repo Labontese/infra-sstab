@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Banananans</title>
+<!--
+  Startsidan som nginx visar på SRV-02-LNX. En fil utan externa resurser,
+  eftersom produktionsnätet inte har internetåtkomst.
+  Läggs ut med:  sudo install -m 0644 web/index.html /var/www/html/index.html
+  Lägg till ?fps i adressen för att se bildhastigheten.
+-->
+<style>
+  :root {
+    --bakgrund: #1b1640;
+    --text: #fff6d5;
+    --gul: #ffd93b;
+    --gul-mork: #e0a800;
+    --gul-djup: #a86f00;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bakgrund); color: var(--text); overflow: hidden;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  canvas:active { cursor: grabbing; }
+  .rubrik { position: fixed; left: 0; right: 0; top: 6vh; text-align: center; pointer-events: none; padding: 0 16px; }
+  h1 { font-family: "Arial Black", "Segoe UI Black", "Segoe UI", Impact, sans-serif; font-weight: 900;
+    font-size: clamp(2rem, 8vw, 6rem); letter-spacing: .02em; line-height: 1.1; color: var(--gul);
+    text-shadow: 0 .06em 0 var(--gul-mork), 0 .12em 0 var(--gul-djup), 0 .2em .35em rgba(0,0,0,.45); }
+  h1 .ord { display: inline-block; white-space: nowrap; }
+  h1 .ord span { display: inline-block; animation: vag 2.4s ease-in-out infinite; }
+  @keyframes vag {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    25% { transform: translateY(-.12em) rotate(-4deg); }
+    50% { transform: translateY(0) rotate(0); }
+    75% { transform: translateY(.05em) rotate(3deg); }
+  }
+  .under { margin-top: 1.1rem; font-size: clamp(.95rem, 2.2vw, 1.25rem); opacity: .9; }
+  .fot { position: fixed; left: 0; right: 0; bottom: 4vh; text-align: center; font-size: .95rem; opacity: .85;
+    padding: 0 16px; pointer-events: none; }
+  .tips { display: inline-block; margin-top: .4rem; font-size: .85rem; opacity: .75; }
+  .konfetti { position: fixed; pointer-events: none; will-change: transform;
+    animation: fall 1.8s cubic-bezier(.25,.6,.4,1) forwards; }
+  @keyframes fall { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+  .reserv { display: none; position: fixed; inset: 0; align-items: center; justify-content: center; font-size: 30vmin; }
+  .ingen-webgl .reserv { display: flex; }
+  .ingen-webgl canvas { display: none; }
+  .reserv span { display: inline-block; animation: snurr 4s linear infinite; }
+  @keyframes snurr { to { transform: rotate(360deg); } }
+  .fel { position: fixed; left: 16px; right: 16px; bottom: 16px; max-height: 40vh; overflow: auto; background: #300;
+    color: #fdd; font: 12px/1.4 monospace; padding: 8px; white-space: pre-wrap; display: none; }
+  .fps { position: fixed; top: 8px; right: 8px; font: 12px monospace; opacity: .7; display: none; }
+  @media (prefers-reduced-motion: reduce) { h1 .ord span, .reserv span { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="scen" aria-label="En 3D-renderad banan som snurrar"></canvas>
+<div class="reserv" aria-hidden="true"><span>🍌</span></div>
+<header class="rubrik">
+  <h1 id="titel" aria-label="Team Banananans">Team Banananans</h1>
+  <p class="under">Serveras av nginx på SRV-02-LNX</p>
+</header>
+<footer class="fot">
+  <span id="adress"></span><br>
+  <span class="tips">Dra för att vrida · klicka för fler bananer</span>
+</footer>
+<pre class="fel" id="fel"></pre>
+<div class="fps" id="fps"></div>
+
+<script id="vs" type="x-shader/x-vertex">
+attribute vec2 aPos;
+void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 uRes;
+uniform float uYaw;
+uniform float uPitch;
+uniform float uBob;
+uniform float uHog;   // 1 = mjuka skuggor och AO, 0 = snabbt läge
+
+const float R0 = 2.2;               // bananens krökningsradie
+const float A0 = 0.9;               // halva vinkeln för bågen
+const vec3 LC = vec3(0.0, 0.45, 0.0); // bananens mitt i lokala koordinater
+const float BR = 2.45;              // omslutande sfär
+
+float gT; float gPhi; float gMat;
+
+float hash(vec3 p) {
+  p = fract(p * 0.3183099 + vec3(0.11, 0.17, 0.13));
+  p *= 17.0;
+  return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+}
+float noise(vec3 x) {
+  vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(hash(i), hash(i + vec3(1,0,0)), f.x), mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
+             mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x), mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
+}
+float radie(float t) {
+  float s = max(sin(3.14159265 * t), 0.0);
+  return (0.05 + 0.37 * pow(s, 0.55)) * (1.0 - 0.15 * t);
+}
+float smin(float a, float b, float k) {
+  float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+  return mix(b, a, h) - k * h * (1.0 - h);
+}
+float kapsel(vec3 p, vec3 a, vec3 b, float r) {
+  vec3 pa = p - a, ba = b - a;
+  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  return length(pa - ba * h) - r;
+}
+
+// Avståndsfunktion för bananen i lokala koordinater: en krökt, avsmalnande tub med fem åsar.
+float karta(vec3 p) {
+  vec2 C = vec2(0.0, R0);
+  vec2 v = p.xy - C;
+  float a = atan(v.x, -v.y);
+  float ac = clamp(a, -A0, A0);
+  float t = (ac + A0) / (2.0 * A0);
+  vec2 n = vec2(sin(ac), -cos(ac));
+  vec3 e = vec3(p.xy - (C + R0 * n), p.z);
+  float phi = atan(e.z, dot(e.xy, n));
+  float r = radie(t) * (1.0 + 0.06 * cos(5.0 * phi + 0.6));
+  float kropp = (length(e) - r) * 0.85;
+
+  vec3 E0 = vec3(C + R0 * vec2(sin(-A0), -cos(-A0)), 0.0);
+  vec3 d0 = vec3(-cos(A0), sin(A0), 0.0);
+  vec3 S1 = E0 + d0 * 0.42 + vec3(0.03, 0.07, 0.0);
+  float stjalk = min(kapsel(p, E0 - d0 * 0.05, S1, 0.07),
+                     kapsel(p, S1 - d0 * 0.02, S1 + d0 * 0.05 + vec3(0.0, 0.01, 0.0), 0.085));
+
+  vec3 E1 = vec3(C + R0 * vec2(sin(A0), -cos(A0)), 0.0) + vec3(cos(A0), sin(A0), 0.0) * 0.03;
+  float topp = length(p - E1) - 0.055;
+
+  float d = min(smin(kropp, stjalk, 0.06), topp);
+  gT = t; gPhi = phi;
+  gMat = stjalk < kropp - 0.01 ? 1.0 : 0.0;
+  if (topp < kropp && topp < stjalk) gMat = 2.0;
+  return d;
+}
+
+vec3 normal(vec3 p) {
+  const vec2 k = vec2(1.0, -1.0); const float h = 0.0015;
+  return normalize(k.xyy * karta(p + k.xyy * h) + k.yyx * karta(p + k.yyx * h) +
+                   k.yxy * karta(p + k.yxy * h) + k.xxx * karta(p + k.xxx * h));
+}
+
+vec2 sfar(vec3 ro, vec3 rd, vec3 c, float r) {
+  vec3 oc = ro - c; float b = dot(oc, rd); float h = b * b - dot(oc, oc) + r * r;
+  if (h < 0.0) return vec2(-1.0);
+  h = sqrt(h); return vec2(-b - h, -b + h);
+}
+
+float skugga(vec3 ro, vec3 rd, float tmax) {
+  vec2 s = sfar(ro, rd, LC, BR);
+  if (s.y < 0.0) return 1.0;
+  float res = 1.0; float t = max(s.x, 0.02);
+  for (int i = 0; i < 48; i++) {
+    if (t > min(tmax, s.y) || (uHog < 0.5 && i >= 20)) break;
+    float h = karta(ro + rd * t);
+    res = min(res, 9.0 * h / t);
+    if (res < 0.002) break;
+    t += clamp(h, 0.02, 0.3);
+  }
+  return clamp(res, 0.0, 1.0);
+}
+
+vec3 bakgrund(vec3 rd, vec2 uv) {
+  vec3 c = mix(vec3(0.30, 0.10, 0.32), vec3(0.05, 0.04, 0.18), smoothstep(-0.4, 0.6, rd.y));
+  c += vec3(0.9, 0.55, 0.15) * 0.22 * exp(-2.5 * length(uv - vec2(0.0, -0.15)));
+  return c;
+}
+
+void main() {
+  vec2 uv = (2.0 * gl_FragCoord.xy - uRes) / uRes.y;
+  float fokus = 2.4 * min(1.0, 0.95 * uRes.x / uRes.y);   // zooma ut på smala skärmar
+
+  vec3 ro = vec3(0.0, 0.4, 6.4);
+  vec3 ta = vec3(0.0, 0.2, 0.0);
+  vec3 ww = normalize(ta - ro);
+  vec3 uu = normalize(cross(ww, vec3(0.0, 1.0, 0.0)));
+  vec3 vv = cross(uu, ww);
+  vec3 rd = normalize(uv.x * uu + uv.y * vv + fokus * ww);
+
+  float cy = cos(uYaw), sy = sin(uYaw), cp = cos(uPitch), sp = sin(uPitch);
+  mat3 R = mat3(1.0, 0.0, 0.0, 0.0, cp, sp, 0.0, -sp, cp) * mat3(cy, 0.0, -sy, 0.0, 1.0, 0.0, sy, 0.0, cy);
+  vec3 W = vec3(0.0, -0.25 + uBob, 0.0);
+  vec3 L = normalize(vec3(0.55, 0.9, 0.6));
+  vec3 Ll = R * L;
+
+  vec3 col = bakgrund(rd, uv);
+
+  // Golv med bananens skugga
+  float golvY = -1.55;
+  float tg = rd.y < 0.0 ? (golvY - ro.y) / rd.y : 1e5;
+  if (tg < 1e4) {
+    vec3 gp = ro + rd * tg;
+    float sha = skugga(R * (gp - W) + LC, Ll, 8.0);
+    float fade = exp(-0.012 * tg * tg);
+    vec3 golv = col * mix(0.45, 0.95, sha);
+    col = mix(col, golv, fade);
+  }
+
+  // Bananen
+  vec3 rol = R * (ro - W) + LC;
+  vec3 rdl = R * rd;
+  vec2 s = sfar(rol, rdl, LC, BR);
+  if (s.y > 0.0) {
+    float t = max(s.x, 0.0);
+    bool traff = false;
+    for (int i = 0; i < 110; i++) {
+      if (uHog < 0.5 && i >= 70) break;
+      float h = karta(rol + rdl * t);
+      if (h < 0.0008 * t) { traff = true; break; }
+      t += h;
+      if (t > s.y) break;
+    }
+    if (traff && t < tg) {
+      vec3 p = rol + rdl * t;
+      karta(p);
+      float bt = gT, bphi = gPhi, mat = gMat;
+      vec3 n = normal(p);
+      vec3 nw = n * R;   // tillbaka till världskoordinater (R är ortonormal)
+
+      vec3 alb;
+      if (mat < 0.5) {
+        float kant = pow(0.5 + 0.5 * cos(5.0 * bphi + 0.6), 6.0);
+        alb = vec3(0.98, 0.62, 0.035) * (0.9 + 0.15 * kant);
+        alb = mix(vec3(0.25, 0.32, 0.03), alb, smoothstep(0.03, 0.16, bt));
+        float flack = noise(p * 8.0 + 3.1);
+        alb = mix(alb, vec3(0.12, 0.06, 0.015), smoothstep(0.80, 0.86, flack) * 0.9);
+        alb = mix(alb, vec3(0.05, 0.03, 0.01), smoothstep(0.955, 0.99, bt));
+      } else if (mat < 1.5) {
+        alb = vec3(0.16, 0.17, 0.04);
+      } else {
+        alb = vec3(0.05, 0.03, 0.012);
+      }
+
+      float dif = clamp(dot(n, Ll), 0.0, 1.0);
+      float sha = uHog > 0.5 ? skugga(p + n * 0.01, Ll, 4.0) : 1.0;
+      float amb = 0.55 + 0.45 * nw.y;
+      vec3 hv = normalize(Ll - rdl);
+      float spe = pow(clamp(dot(n, hv), 0.0, 1.0), 32.0);
+      float fre = pow(1.0 - clamp(dot(n, -rdl), 0.0, 1.0), 3.0);
+      float ao = 1.0;
+      if (uHog > 0.5) {
+        ao = 0.0;
+        for (int j = 1; j <= 4; j++) {
+          float hh = 0.04 * float(j);
+          ao += (hh - karta(p + n * hh)) / float(j);
+        }
+        ao = clamp(1.0 - 3.0 * ao, 0.3, 1.0);
+      }
+      col = alb * (vec3(1.25, 1.1, 0.9) * dif * sha + vec3(0.30, 0.28, 0.45) * amb * ao)
+          + vec3(1.0, 0.95, 0.8) * spe * 0.35 * sha
+          + vec3(0.55, 0.35, 0.85) * fre * 0.35 * ao;
+    }
+  }
+
+  col = pow(col, vec3(0.4545));
+  col *= 1.0 - 0.18 * dot(uv * 0.5, uv * 0.5);
+  gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+  "use strict";
+  var titel = document.getElementById("titel");
+  // Varje bokstav vågar för sig. Orden hålls ihop, men raden kan brytas mellan dem på smala skärmar.
+  titel.textContent = "";
+  var nr = 0;
+  "Team Banananans".split(" ").forEach(function (ord, i) {
+    if (i > 0) titel.appendChild(document.createTextNode(" "));
+    var o = document.createElement("span");
+    o.className = "ord";
+    o.setAttribute("aria-hidden", "true");
+    Array.prototype.forEach.call(ord, function (tecken) {
+      var s = document.createElement("span");
+      s.textContent = tecken;
+      s.style.animationDelay = (nr++ * 0.09) + "s";
+      o.appendChild(s);
+    });
+    titel.appendChild(o);
+  });
+  document.getElementById("adress").textContent = location.host
+    ? "Du är på http://" + location.host + "/"
+    : "Öppnad som lokal fil";
+
+  var lugn = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var canvas = document.getElementById("scen");
+  var fel = document.getElementById("fel");
+  var gl = canvas.getContext("webgl", { antialias: false, alpha: false, preserveDrawingBuffer: true }) ||
+           canvas.getContext("experimental-webgl");
+  if (!gl) { document.body.classList.add("ingen-webgl"); return; }
+
+  function shader(typ, kalla) {
+    var s = gl.createShader(typ);
+    gl.shaderSource(s, kalla);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  var prog;
+  try {
+    prog = gl.createProgram();
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, document.getElementById("vs").textContent));
+    gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, document.getElementById("fs").textContent));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  } catch (e) {
+    fel.textContent = "Kunde inte starta 3D-bananen:\n" + e.message;
+    fel.style.display = "block";
+    document.body.classList.add("ingen-webgl");
+    return;
+  }
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, "aPos");
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+  var u = {};
+  ["uRes", "uYaw", "uPitch", "uBob", "uHog"].forEach(function (n) { u[n] = gl.getUniformLocation(prog, n); });
+
+  // Upplösningen anpassas efter hur snabbt datorn ritar, så att sidan går även utan grafikkort.
+  var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  var skala = dpr * 0.6, MIN = 0.25, MAX = dpr, hog = 1;
+  function storlek() {
+    var w = Math.max(1, Math.round(innerWidth * skala)), h = Math.max(1, Math.round(innerHeight * skala));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+  }
+  addEventListener("resize", storlek);
+  storlek();
+
+  var yaw = 0, pitch = 0, snurr = lugn ? 0.15 : 0.6, extra = 0;
+  var drar = false, sx = 0, sy = 0, flyttat = 0;
+  canvas.addEventListener("pointerdown", function (e) {
+    drar = true; sx = e.clientX; sy = e.clientY; flyttat = 0; canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener("pointermove", function (e) {
+    if (!drar) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    sx = e.clientX; sy = e.clientY; flyttat += Math.abs(dx) + Math.abs(dy);
+    yaw += dx * 0.01; pitch = Math.max(-1.2, Math.min(1.2, pitch + dy * 0.01));
+  });
+  canvas.addEventListener("pointerup", function (e) {
+    drar = false;
+    if (flyttat < 6) { extra += 8; konfetti(e.clientX, e.clientY); }
+  });
+
+  function konfetti(x, y) {
+    var antal = lugn ? 4 : 14;
+    for (var i = 0; i < antal; i++) {
+      var s = document.createElement("span");
+      s.className = "konfetti";
+      s.textContent = "🍌";
+      s.style.left = (x - 16) + "px";
+      s.style.top = (y - 16) + "px";
+      s.style.fontSize = (1.2 + Math.random() * 1.8) + "rem";
+      s.style.setProperty("--dx", ((Math.random() * 2 - 1) * 40) + "vw");
+      s.style.setProperty("--dy", (20 + Math.random() * 60) + "vh");
+      s.style.setProperty("--rot", ((Math.random() * 2 - 1) * 720) + "deg");
+      s.addEventListener("animationend", function () { this.remove(); });
+      document.body.appendChild(s);
+    }
+  }
+
+  var visaFps = /(^|[?&])fps\b/.test(location.search), fpsRuta = document.getElementById("fps");
+  if (visaFps) fpsRuta.style.display = "block";
+  var forra = performance.now(), tid = 0, summa = 0, bilder = 0;
+  function rita(nu) {
+    var dt = Math.min(0.1, (nu - forra) / 1000); forra = nu;
+    tid += dt;
+    if (!drar) yaw += (snurr + extra) * dt;
+    extra *= Math.pow(0.25, dt);
+    var bob = lugn ? 0 : 0.08 * Math.sin(tid * 1.3);
+    var lut = drar ? pitch : pitch + (lugn ? 0 : 0.25 * Math.sin(tid * 0.5));
+
+    gl.uniform2f(u.uRes, canvas.width, canvas.height);
+    gl.uniform1f(u.uYaw, yaw);
+    gl.uniform1f(u.uPitch, lut);
+    gl.uniform1f(u.uBob, bob);
+    gl.uniform1f(u.uHog, hog);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    summa += dt; bilder++;
+    if (bilder === 30) {
+      var snitt = summa / bilder * 1000;
+      if (snitt > 34) { if (skala > MIN) skala = Math.max(MIN, skala * 0.8); else hog = 0; }
+      else if (snitt < 17 && skala < MAX) skala = Math.min(MAX, skala * 1.1);
+      else if (snitt < 12 && !hog) hog = 1;
+      storlek();
+      if (visaFps) fpsRuta.textContent = Math.round(1000 / snitt) + " fps · skala " + skala.toFixed(2) + (hog ? " · hög" : " · snabb");
+      summa = 0; bilder = 0;
+    }
+    requestAnimationFrame(rita);
+  }
+  requestAnimationFrame(rita);
+})();
+</script>
+</body>
+</html>

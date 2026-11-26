@@ -38,6 +38,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-19 | Daniel | Granska och godkänna #35 | Claude Code (Claude Opus 5.5) | Granskningen på #35 | Nej |
 | 2026-11-19 | Daniel | Logga AI-användning i AI-loggen och beskriva reglerna i README | Claude Code (Claude Opus 5.5) | #44 | Nej |
 | 2026-11-19 | Daniel | Hitta alla stavningar av gruppen för alla anställda och rätta `least-privilege.md` efter beslutet i #43 | Claude Code (Claude Opus 5.5) | #45 | Nej |
+| 2026-11-23 | Jan | Granska arbetsstegen i `OU.md` och få förslag på tydligare instruktioner och en kontroll av gruppnamnet i AD | ChatGPT | [PR #34](https://github.com/Labontese/infra-sstab/pull/34) | Ja, förslag som ändrade guidens upplägg valdes bort | 
 | 2026-11-23 | Jonas | Strukturera om driftsättningsguide Windows Server 2025 (002.md), rensa dubbletter och lägga till avslutning | Google Antigravity (Gemini / Claude Sonnet) | #32 | Nej |
 | 2026-11-23 | Jonas | Granska och uppdatera arkiveringsskript för Samba-backup (`arkivera-backup.sh`) | Google Antigravity (Claude Sonnet) | #46 | Nej |
 | 2026-11-23 | Daniel | Granska arkivskriptet i #46 och ta fram ett testat förslag till rättning | Claude Code (Claude Opus 5.5), Codex CLI (gpt-6.1-terra) | Granskningen och kommentaren på #46 | Ja, se [posten nedan](#2026-11-23--daniel--granskning-av-arkivskriptet-i-46) |

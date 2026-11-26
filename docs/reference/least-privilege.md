@@ -31,6 +31,8 @@ En egen GPO skapades i stället för att ändra Default Domain Controllers Polic
 
 GPO:n ska bara vara länkad till **Domain Controllers**. Länkas den till hela domänen nekas alla anställda inloggning på sina egna datorer.
 
+![CIS - Least Privilege DC länkad till Domain Controllers med länkordning 1](bilder/active-directory/gpo-domain-controllers.png)
+
 ## Steg 3 – Ställ in User Rights Assignment
 
 ### Genomförande
@@ -48,37 +50,32 @@ GPO:n ska bara vara länkad till **Domain Controllers**. Länkas den till hela d
 | 2.2.7 | Allow log on locally | Administrators, ENTERPRISE DOMAIN CONTROLLERS | Administrators, ENTERPRISE DOMAIN CONTROLLERS |
 | 2.2.9 | Allow log on through Remote Desktop Services | Administrators | Administrators |
 | 2.2.19 | Debug programs | Administrators | Administrators |
-| 2.2.24 | Deny log on locally | Ska innehålla Guests | Guests, Anstallda |
-| 2.2.25 | Deny log on through Remote Desktop Services | Ska innehålla Guests | Guests, Anstallda |
+| 2.2.24 | Deny log on locally | Ska innehålla Guests | Guests, gg-anstallda |
+| 2.2.25 | Deny log on through Remote Desktop Services | Ska innehålla Guests | Guests, gg-anstallda |
 | 2.2.46 | Shut down the system | Administrators | Administrators |
 
 Ta aldrig bort `Administrators` från **Allow log on locally**. Då kan ingen logga in på domänkontrollanten.
 
-## Steg 4 – Samla avdelningarna i gruppen Anstallda
+## Steg 4 – Kontrollera gruppen gg-anstallda
 
-Gruppen `Anstallda` innehåller alla avdelningsgrupper. Den används i Deny-reglerna i Steg 3, så att alla anställda nekas inloggning på domänkontrollanten. Ett nekande vinner alltid över ett tillstånd.
+Gruppen `gg-anstallda` skapas och fylls med alla anställda enligt [OU.md](OU.md). Den används i Deny-reglerna i Steg 3, så att alla anställda nekas inloggning på domänkontrollanten. Ett nekande vinner alltid över ett tillstånd. Namnet skrivs utan å, ä och ö för att undvika problem med svenska tecken.
 
 ### Genomförande
 
 1. Öppna **Active Directory Users and Computers**.
-2. Högerklicka på `SkamtSidoTransport` och välj **New → Group**.
-3. Ange namnet `Anstallda`, välj **Global** och **Security**.
-4. Klicka på **OK**.
-5. Högerklicka på `Anstallda` och välj **Properties**.
-6. Öppna fliken **Members** och klicka på **Add…**.
-7. Ange `Ledning; HR; Ekonomi; IT; Lager` och klicka på **Check Names**.
-8. Klicka på **OK**.
+2. Högerklicka på `gg-anstallda` och välj **Properties**.
+3. Öppna fliken **Members** och kontrollera att alla anställda finns med.
 
-IT-personalen har ett separat adminkonto (`adm-<namn>`) i gruppen `Administrators`. Adminkontot får inte vara med i `Anstallda`, annars nekas det också inloggning. Det vanliga kontot används för det dagliga arbetet.
+IT-personalen har ett separat adminkonto (`adm-<namn>`) i gruppen `Administrators`. Adminkontot får inte vara med i `gg-anstallda`, annars nekas det också inloggning. Det vanliga kontot används för det dagliga arbetet.
 
 ## Steg 5 – Delegera användarhantering till IT
 
-Gruppen `IT` får hantera användarkonton i företagets OU utan att vara med i Domain Admins.
+Gruppen `gg-it` får hantera användarkonton i företagets OU utan att vara med i Domain Admins.
 
 ### Genomförande
 
 1. Högerklicka på `SkamtSidoTransport` och välj **Delegate Control…**.
-2. Klicka på **Next**, sedan **Add…**, ange `IT` och klicka på **Check Names**.
+2. Klicka på **Next**, sedan **Add…**, ange `gg-it` och klicka på **Check Names**.
 3. Klicka på **OK** och **Next**.
 4. Kryssa i **Create, delete, and manage user accounts** och **Reset user passwords and force password change at next logon**.
 5. Klicka på **Next → Finish**.
@@ -93,18 +90,22 @@ Gruppen `IT` får hantera användarkonton i företagets OU utan att vara med i D
    gpresult /r /scope computer
    ```
 2. Kontrollera att `CIS - Least Privilege DC` finns under **Applied Group Policy Objects**.
-3. Försök logga in på domänkontrollanten med en vanlig användare, till exempel en i `Lager`. Inloggningen ska nekas.
+3. Försök logga in på domänkontrollanten med en vanlig användare, till exempel en i `gg-lager`. Inloggningen ska nekas.
 4. Kontrollera att ingen vanlig användare är med i **Domain Admins** (Properties → **Members**).
+
+![gpresult visar CIS - Least Privilege DC, och gg-anstallda nekas inloggning](bilder/active-directory/least-privilege-dc.png)
+
+![En användare i gg-lager nekas inloggning på domänkontrollanten](bilder/active-directory/nekad-inloggning-dc.png)
 
 ## Behörighet per grupp
 
 | Grupp | Mappar | Inloggning på DC | Ansluta datorer | Hantera användare | Lösenordspolicy |
 |---|---|---|---|---|---|
-| Ledning | RW Ledning, R Gemensamt | Nej | Nej | Nej | `pso-Ledning` |
-| HR | RW HR, R Gemensamt | Nej | Nej | Nej | `pso-hr` |
-| Ekonomi | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | `pso-ekonomi` |
-| IT | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | `pso-it` |
-| Lager | RW Lager, R Gemensamt | Nej | Nej | Nej | `pso-lager` |
+| `gg-ledning` | RW Ledning, R Gemensamt | Nej | Nej | Nej | `pso-ledning` |
+| `gg-hr` | RW HR, R Gemensamt | Nej | Nej | Nej | `pso-hr` |
+| `gg-ekonomi` | RW Ekonomi och Lager, R Gemensamt | Nej | Nej | Nej | `pso-ekonomi` |
+| `gg-it` | RW IT, R Gemensamt | Nej | Nej | Ja, delegerat på `SkamtSidoTransport` | `pso-it` |
+| `gg-lager` | RW Lager, R Gemensamt | Nej | Nej | Nej | `pso-lager` |
 | Adminkonton (`adm-<namn>`) | – | Ja | Ja | Ja | Default Domain Policy |
 
 Mapparna delas från en Windows-server. Vilken server är inte bestämt än. Lösenordspolicyerna beskrivs i [losenordspolicy.md](losenordspolicy.md).
@@ -116,5 +117,5 @@ Följande har genomförts:
 - En GPO, `CIS - Least Privilege DC`, länkad till Domain Controllers.
 - Sju inställningar från CIS 2.2 User Rights Assignment.
 - Bara administratörer kan logga in på domänkontrollanten, ansluta datorer till domänen och stänga av servern.
-- Gruppen `Anstallda` med alla avdelningsgrupper, nekad inloggning på domänkontrollanten.
-- Delegerad användarhantering till gruppen `IT`.
+- Gruppen `gg-anstallda` med alla anställda, nekad inloggning på domänkontrollanten.
+- Delegerad användarhantering till gruppen `gg-it`.
