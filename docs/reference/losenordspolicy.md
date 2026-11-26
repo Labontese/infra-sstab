@@ -28,7 +28,7 @@ En PSO skapades för lagerpersonalen.
 
 ### Password Policy
 
-| CIS | Inställning | CIS-krav | Anställd Lager / Default Domain Policy |
+| CIS | Inställning | CIS-krav | pso-lager / Default Domain Policy |
 |---|---|---|---|
 | 1.1.1 | Enforce password history | 24 eller fler | 24 |
 | 1.1.2 | Maximum password age | 365 dagar eller färre, inte 0 | 100 dagar |
@@ -49,13 +49,13 @@ CIS 1.1.6 och 1.2.3 gäller bara medlemsservrar och finns inte i en PSO.
 
 ## Steg 3 – Koppla policyn till säkerhetsgruppen
 
-PSO:n kopplades till säkerhetsgruppen `Lager`, så att den gäller alla användare i gruppen.
+PSO:n kopplades till säkerhetsgruppen `gg-lager`, så att den gäller alla användare i gruppen.
 
 ### Genomförande
 
 1. Gå till **Directly Applies To** i samma fönster.
 2. Klicka på **Add…**.
-3. Ange gruppen `Lager` och klicka på **Check Names**.
+3. Ange gruppen `gg-lager` och klicka på **Check Names**.
 4. Klicka på **OK**.
 5. Klicka på **OK** för att spara PSO:n.
 6. Upprepa steg 2–3 för resterande avdelningar: Ekonomi, HR, IT och Ledning.
@@ -64,17 +64,17 @@ Varje avdelning får en egen PSO med eget namn, exempelvis `pso-ekonomi`, och ko
 
 En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till OU:er.
 
-![PSO iso-lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
+![pso-lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
 
 ## Precedence per avdelning
 
 | Avdelning | PSO | Säkerhetsgrupp | Precedence |
 |---|---|---|---|
-| Ledning | `pso-ledning` | Ledning | 10 |
-| IT | `pso-it` | IT | 20 |
-| Ekonomi | `pso-ekonomi` | Ekonomi | 30 |
-| HR | `pso-hr` | HR | 40 |
-| Lager | `pso-lager` | Lager | 50 |
+| Ledning | `pso-ledning` | gg-ledning | 10 |
+| IT | `pso-it` | gg-it | 20 |
+| Ekonomi | `pso-ekonomi` | gg-ekonomi | 30 |
+| HR | `pso-hr` | gg-hr | 40 |
+| Lager | `pso-lager` | gg-lager | 50 |
 
 Lägst siffra vinner, och den striktaste policyn ska ha lägst värde. Luckorna gör att nya PSO:er kan läggas in utan att de andra behöver numreras om.
 
@@ -107,7 +107,7 @@ Kontrollera i PowerShell att PSO:n finns och att den gäller för en användare 
    Get-ADUserResultantPasswordPolicy -Identity <användare>
    ```
 
-Kommandot i punkt 3 ska returnera `pso-lager` för en användare i gruppen `Lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
+Kommandot i punkt 3 ska returnera `pso-lager` för en användare i gruppen `gg-lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
 
 ## Steg 5 – Byta avdelning för en användare
 
@@ -155,5 +155,5 @@ Följande har genomförts:
 - Minsta lösenordslängd 14 tecken (CIS 1.1.4).
 - Kontoutlåsning efter 5 misslyckade försök i 30 minuter (CIS 1.2.1, 1.2.2, 1.2.4).
 - Lösenordsbyte tidigast efter 1 dag och senast efter 100 dagar, och de 24 senaste lösenorden får inte återanvändas (CIS 1.1.1–1.1.3).
-- Koppling av PSO:n till säkerhetsgruppen `Lager`.
+- Koppling av PSO:n till säkerhetsgruppen `gg-lager`.
 - Default Domain Policy med CIS 1.1 och 1.2.

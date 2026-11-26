@@ -36,6 +36,11 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-18 | Daniel | Review av #32, #34 och #35 och issues om backup (#36–#41) | Claude Code (Claude Opus 5.5) | Review-kommentarerna och issuerna | Nej |
 | 2026-11-18 | Liam | Förbättra how-to-backup-windows-server.md (backup per avdelning till Samba) och ta fram färdiga kommandon | Claude (claude.ai, Claude Sonnet 5.5) | #35 | Ja, två förslag togs bort, se posten nedan |
 | 2026-11-23 | Jan | Granska arbetsstegen i `OU.md` och få förslag på tydligare instruktioner och en kontroll av gruppnamnet i AD | ChatGPT | [PR #34](https://github.com/Labontese/infra-sstab/pull/34) | Ja, förslag som ändrade guidens upplägg valdes bort | 
+| 2026-11-23 | Jonas | Strukturera om driftsättningsguide Windows Server 2025 (002.md), rensa dubbletter och lägga till avslutning | Google Antigravity (Gemini / Claude Sonnet) | #32 | Nej |
+| 2026-11-23 | Jonas | Granska och uppdatera arkiveringsskript för Samba-backup (`arkivera-backup.sh`) | Google Antigravity (Claude Sonnet) | #46 | Nej |
+| 2026-11-25 | Liam | Skapat mall för DHCP Återställning som sedan skrevs i manuellt| Claude Sonnet 5| #39 | Nej |
+| 2026-11-25 | Liam | Skapat mall för backup rutinen som sedan skrevs i manuellt| Claude Sonnet 5| #53 | Nej |
+ main
 ## Mall
 
 Kopiera blocket, lägg det under "Poster" och fyll i.
