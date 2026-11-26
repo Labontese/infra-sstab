@@ -51,6 +51,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-25 | Daniel | Bygga en Windows 11-klient i testmiljön och testa brandväggen från den | Claude Code (Claude Opus 5.5) | #72 | Ja: svarsfilen hade tre fel (språk, för långt kommando, OpenSSH utan internet), och kontrollen av gästagenten använde ett kommando som inte finns |
 | 2026-11-26 | Daniel | GPO som ger klienterna startsidan i Edge, testad med en ny inloggning på klienten | Claude Code (Claude Opus 5.5) | #73 | Ja: Edges bakgrundsstart tog över inloggningen, och Run-posten via Preferences blev kvar på klienten. Bytt till en policy |
 | 2026-11-26 | Daniel | Ta skärmbilder på klienten som test-hr till Fildelning.md och rätta chaslab.local | Claude Code (Claude Opus 5.5) | #74 | Ja: första bilderna stoppades av en UAC-ruta och tomma Windows Terminal-fönster. Tog om dem i den klassiska konsolen |
+| 2026-11-26 | Daniel | Ta skärmbilder på SRV-01-DC till OU.md, losenordspolicy.md, least-privilege.md och brandväggsguiden | Claude Code (Claude Opus 5.5) | #75, #45 | Ja: PSO:ernas beskrivning i testmiljön skilde sig från guiden och rättades före bilden. Ett konflikttest mot #70 gav falsklarm, eftersom det använde fel bas |
 
 ## Mall
 
