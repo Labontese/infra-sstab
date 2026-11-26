@@ -106,7 +106,7 @@ Windows-klienten ansluts till Active Directory-domänen för att kunna använda 
 4. Öppna fliken **Computer Name**.
 5. Klicka på **Change**.
 6. Välj **Domain**.
-7. Ange `chaslab.local`.
+7. Ange `sost.local`.
 8. Klicka på **OK**.
 9. Ange administratörsuppgifter för domänen.
 10. Starta om datorn.
@@ -122,17 +122,17 @@ Inloggning på Windows-klienten testades med ett användarkonto från Active Dir
 1. Starta Windows-klienten.
 2. Öppna inloggningsskärmen.
 3. Välj **Other user** vid behov.
-4. Ange ett användarkonto från domänen, exempelvis `CHASLAB\Jan-test`.
+4. Ange ett användarkonto från domänen, exempelvis `SOST\test-hr`.
 5. Ange kontots lösenord.
 6. Tryck på **Enter**.
 
 ### Resultat
 
-Det visar att Windows-klienten kunde autentisera användaren mot domänen `chaslab.local`.
+Det visar att Windows-klienten kunde autentisera användaren mot domänen `sost.local`.
 
-För att kontrollera vilket konto som är inloggat använde vi kommandot `whoami` i Powershell.
+För att kontrollera vilket konto som är inloggat använde vi kommandot `whoami` i Powershell. `whoami /groups` visar att användaren är med i sin avdelningsgrupp, `gg-anstallda` och de domänlokala grupperna för HR och Gemensamt.
 
-![test](../reference/bilder/active-directory/whoami.png)
+![whoami som SOST\test-hr på en klient i domänen sost.local](../reference/bilder/active-directory/fildelning-whoami.png)
 
 
 ## Steg 6 – Kontrollera åtkomst till delade mappar
@@ -157,12 +157,13 @@ Delade mappar kan öppnas från Windows-klienten genom att ange serverns nätver
 ### Förväntat resultat
 
 En användare i HR-gruppen ska kunna skapa, läsa och ändra dokument i HR-mappen.
-![test](../reference/bilder/active-directory/klient-test.png)
+![En ny fil i HR-mappen, skapad av test-hr](../reference/bilder/active-directory/fildelning-hr.png)
 
 HR-användaren ska kunna öppna sin egen HR-mapp och läsa
 Gemensamma dokument, men nekas åtkomst till övriga
 avdelningars mappar.
-![test-lager](../reference/bilder/active-directory/test-lager.png)
+![test-hr nekas åtkomst till Ekonomi](../reference/bilder/active-directory/fildelning-ekonomi.png)
+
 ### Kontrollera Gemensamma dokument
 
 1. Tryck **Win + R**.
@@ -178,7 +179,8 @@ avdelningars mappar.
 
 
 En vanlig anställd ska kunna läsa dokumenten men inte skapa, ändra eller ta bort filer i mappen.
-![gemensamma-nekas-ändra](../reference/bilder/active-directory/Gemensamma-test.png)
+![Gemensamma dokument går att öppna](../reference/bilder/active-directory/fildelning-gemensamma.png)
+![Att skapa en fil i Gemensamma dokument nekas](../reference/bilder/active-directory/fildelning-gemensamma-skriv.png)
 
 
 ## Resultat
@@ -191,6 +193,6 @@ Följande har konfigurerats:
 - NTFS-behörigheter med domänlokala säkerhetsgrupper.
 - SMB-delningar med avdelningsspecifika behörigheter.
 - Läsbehörighet för alla anställda på Gemensamma dokument.
-- En Windows-klient ansluten till domänen `chaslab.local`.
+- En Windows-klient ansluten till domänen `sost.local`.
 - Lyckad inloggning med ett Active Directory-användarkonto.
 
