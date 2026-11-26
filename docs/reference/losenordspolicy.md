@@ -64,7 +64,7 @@ Varje avdelning får en egen PSO med eget namn, exempelvis `pso-ekonomi`, och ko
 
 En PSO kan bara kopplas till användare och globala säkerhetsgrupper, inte till OU:er.
 
-![pso-lager](../reference/bilder/active-directory/pso-anstalld-lager.png)
+![pso-lager i ADAC, kopplad till gg-lager](../reference/bilder/active-directory/pso-lager.png)
 
 ## Precedence per avdelning
 
@@ -108,6 +108,8 @@ Kontrollera i PowerShell att PSO:n finns och att den gäller för en användare 
    ```
 
 Kommandot i punkt 3 ska returnera `pso-lager` för en användare i gruppen `gg-lager`. Om det inte returnerar något gäller domänens standardpolicy (Default Domain Policy).
+
+![pso-lager gäller för test-lager, och alla fem PSO:er med sina grupper](../reference/bilder/active-directory/pso-resultat.png)
 
 ## Steg 5 – Byta avdelning för en användare
 
