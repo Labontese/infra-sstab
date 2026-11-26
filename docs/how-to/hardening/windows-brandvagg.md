@@ -151,6 +151,8 @@ Get-NetFirewallProfile -PolicyStore ActiveStore |
     Format-Table Name, Enabled, DefaultInboundAction, AllowLocalFirewallRules, LogFileName
 ```
 
+![Produktionskortet är DomainAuthenticated, och alla profiler blockerar inkommande trafik](../bilder/brandvagg-profiler.png)
+
 `CIS - Windows Firewall DC` ska stå under *Applied Group Policy Objects*:
 ```
 gpresult /r /scope computer

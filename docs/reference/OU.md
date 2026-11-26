@@ -235,7 +235,7 @@ Enligt vår [ACL-plan](acl/acc-plan.md).
 4. Öppna fliken **Member Of**.
 5. Kontrollera att användaren tillhör rätt global grupp och `gg-anstallda`.
 
-   ![Member of](../reference/bilder/active-directory/image.png)
+   ![Member Of för test-lager: Domain Users, gg-anstallda och gg-lager](../reference/bilder/active-directory/test-lager-member-of.png)
 
 6. Gå till `SkamtSidoTransport → Grupper → DomanLokala`.
 7. Öppna exempelvis `dl-lager-rw`.
