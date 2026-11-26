@@ -32,6 +32,7 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Git-arbetssätt](docs/how-to/git-arbetssatt.md) | En branch per uppgift, PR med peer review och vanliga git/gh-kommandon |
 | [Backup av SRV-01-DC](docs/how-to/how-to-backup-windows-server.md) | Säkerhetskopiera SRV-01-DC till SRV-02-LNX med Windows Server Backup och återställa |
 | [Felsök nginx](docs/how-to/felsok-nginx.md) | Status, konfigurationstest, brandvägg och loggar när webbsidan inte går att nå |
+| [Startsidan i Edge](docs/how-to/startsida-gpo.md) | GPO som ger klienterna startsidan på SRV-02-LNX i Edge och öppnar den vid inloggning |
 | [Härdning: brandvägg UFW](docs/how-to/hardening/ufw.md) | UFW-regler på SRV-02-LNX: SSH från produktionsnätet, SMB3 bara från SRV-01-DC |
 | [Härdning: SSH](docs/how-to/hardening/ssh.md) | Inställningar i `sshd_config` mot brute force och obehörig inloggning |
 | [Härdning: automatiska säkerhetsuppdateringar](docs/how-to/hardening/autouppdateringar.md) | `unattended-upgrades` på Ubuntu Server |
