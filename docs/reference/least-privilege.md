@@ -31,6 +31,8 @@ En egen GPO skapades i stället för att ändra Default Domain Controllers Polic
 
 GPO:n ska bara vara länkad till **Domain Controllers**. Länkas den till hela domänen nekas alla anställda inloggning på sina egna datorer.
 
+![CIS - Least Privilege DC länkad till Domain Controllers med länkordning 1](bilder/active-directory/gpo-domain-controllers.png)
+
 ## Steg 3 – Ställ in User Rights Assignment
 
 ### Genomförande
@@ -90,6 +92,10 @@ Gruppen `gg-it` får hantera användarkonton i företagets OU utan att vara med 
 2. Kontrollera att `CIS - Least Privilege DC` finns under **Applied Group Policy Objects**.
 3. Försök logga in på domänkontrollanten med en vanlig användare, till exempel en i `gg-lager`. Inloggningen ska nekas.
 4. Kontrollera att ingen vanlig användare är med i **Domain Admins** (Properties → **Members**).
+
+![gpresult visar CIS - Least Privilege DC, och gg-anstallda nekas inloggning](bilder/active-directory/least-privilege-dc.png)
+
+![En användare i gg-lager nekas inloggning på domänkontrollanten](bilder/active-directory/nekad-inloggning-dc.png)
 
 ## Behörighet per grupp
 
