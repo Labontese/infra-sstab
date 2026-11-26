@@ -49,6 +49,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-25 | Daniel | Startsida för nginx på SRV-02-LNX | Claude Code (Claude Opus 5.5) | #65 | Ja: rubriken kunde inte radbrytas på smala skärmar |
 | 2026-11-25 | Daniel | Skript för AD, fildelning, minsta rättighet och lösenordspolicy ur labbskripten | Claude Code (Claude Opus 5.5) | #70 | Ja: medlemskapet i `gg-anstallda` rättat efter `OU.md` |
 | 2026-11-25 | Daniel | Bygga en Windows 11-klient i testmiljön och testa brandväggen från den | Claude Code (Claude Opus 5.5) | #72 | Ja: svarsfilen hade tre fel (språk, för långt kommando, OpenSSH utan internet), och kontrollen av gästagenten använde ett kommando som inte finns |
+| 2026-11-26 | Daniel | GPO som ger klienterna startsidan i Edge, testad med en ny inloggning på klienten | Claude Code (Claude Opus 5.5) | #73 | Ja: Edges bakgrundsstart tog över inloggningen, och Run-posten via Preferences blev kvar på klienten. Bytt till en policy |
 
 ## Mall
 
