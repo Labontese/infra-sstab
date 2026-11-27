@@ -9,7 +9,9 @@
 | gg-it | X | X | X | X | RW | R |
 | gg-anstallda | X | X | X | X | X | R |
 
-## SMB Config
+> **Obs:** Avdelningsmapparna delas ut från Windows Server (SRV-01-DC) med NTFS-behörigheter enligt [Fildelning på Windows Server](../Fildelning.md). Samba på SRV-02-LNX används uteslutande som mottagare för Windows Server-backuper (`/srv/samba/backups`). Nedanstående Samba-konfiguration sparas endast som referens/utkast.
+
+## SMB Config (Historiskt utkast)
 ### Utkast för samba konfigurering
 ```
 [HR]
