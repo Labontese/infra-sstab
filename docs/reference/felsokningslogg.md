@@ -65,3 +65,34 @@ Logg över verkliga problem som teamet stött på under installation, konfigurat
      Add-Computer -DomainName "sost.local" -Credential (Get-Credential) -Restart
      ```
      *Resultat:* Datorn anslöts och startade om utan fel.
+
+
+### IT-delningen nekar filskapande
+
+**Datum** 2026-11-26
+
+1. **Symptom** – Första körningen av `testa-delningar.sh` från `SRV-02-LNX` visade **FEL** när `test-it` försökte skriva i IT-delningen. [Testa fildelning från Linux](https://github.com/Labontese/infra-sstab/blob/12828fa132e2753d7177e4ff837e2275fa850a89/docs/how-to/test-fildelning-fran-linux.md)
+
+   ![Första körningen visar FEL för skrivtestet i IT](bilder/active-directory/fildelning-script-inte-fungerar.png)
+
+2. **Hypotes** – Gruppen `dl-it-rw` saknade skrivrätt på SMB-delningen eller på IT-mappen.
+
+3. **Felsökning** – Ett test med `smbclient` visade att `test-it` kunde lista filer i IT. Uppladdningen av en provfil gav `NT_STATUS_ACCESS_DENIED`. Efter att **Change** lades till på SMB-delningen nekades uppladdningen fortfarande. En kontroll med `Get-Acl` visade att gruppen bara hade **ReadAndExecute** på IT-mappen.
+
+4. **Grundorsak** – `dl-it-rw` hade läsbehörighet på båda nivåerna. SMB-delningen gav **Read** och IT-mappens NTFS-behörighet gav **ReadAndExecute**.
+
+5. **Åtgärd** – `SOST\dl-it-rw` fick **Change** på SMB-delningen och **Modify** på IT-mappen.
+
+   **SMB-delningen före och efter**
+
+   | Före – Read | Efter – Read och Change |
+   | --- | --- |
+   | ![SMB före ändringen med bara Read](bilder/active-directory/felsokning-permission-it.png) | ![SMB efter ändringen med Read och Change](bilder/active-directory/felsokning-ratt-permission-1.png) |
+
+   **NTFS efter ändringen**
+
+   **Modify** gäller för mappen, undermappar och filer. Rutan som begränsar arvet till närmaste nivå är avmarkerad.
+
+   ![NTFS efter ändringen med Modify och arv till undermappar](bilder/active-directory/felsokning-ratt-permission.png)
+
+6. **Verifiering** – `test-it` kunde ladda upp provfilen. När skriptet kördes igen visade alla 12 kontroller **OK**.
