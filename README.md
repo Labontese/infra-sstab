@@ -54,7 +54,7 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 
 | Dokument | Innehåll |
 |---|---|
-| [Incident-playbook](docs/incident-playbook.md) | Inte påbörjad |
+| [Incident-playbook](docs/incident-playbook.md) | Vad IT gör vid ett utlåst konto, intrång eller ransomware, en server som är nere eller en raderad fil, och incidentloggen |
 | [CHANGELOG](CHANGELOG.md) | Vad som har ändrats och när |
 | [AI-logg](docs/ai-logg.md) | All AI-användning i projektet, regler för vad som får skickas till AI och mall för nya poster (kursmål 13) |
 | [Startsida för nginx](web/index.html) | Sidan som nginx på SRV-02-LNX visar, `/var/www/html/index.html` |

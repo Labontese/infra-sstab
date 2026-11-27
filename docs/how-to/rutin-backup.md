@@ -51,7 +51,7 @@ egen loggrad (skrivs till syslog/cron-mail) visar OK eller FEL.
    ```
 
 4. Dokumentera incidenten: datum, orsak, åtgärd, i
-   [plats för avvikelselogg, t.ex. ett issue eller en logg under docs/].
+   [incidentloggen](../incident-playbook.md#incidentlogg).
 5. Om felet berodde på platsbrist, se över `SPARA`-värdet i arkivskriptet
    (#46) eller diskstorleken.
 
