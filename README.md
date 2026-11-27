@@ -48,6 +48,7 @@ Dokumentationen ligger i [docs/](docs/) och är indelad enligt [Diátaxis](https
 | [Lösenords- och utlåsningspolicy](docs/reference/losenordspolicy.md) | Default Domain Policy och PSO:er per avdelning enligt CIS Benchmark kapitel 1 |
 | [Minsta rättighet](docs/reference/least-privilege.md) | Rättigheter på domänkontrollanten enligt CIS kapitel 2.2 och behörighet per grupp |
 | [Fildelning på Windows Server](docs/reference/Fildelning.md) | Mappar och behörigheter för avdelningarnas fildelning enligt least privilege |
+| [Felsökningslogg](docs/reference/felsokningslogg.md) | Verkliga problem och lösningar med systematisk felsökningsmetodik (kursmål 7) |
 | [nginx-sökvägar](docs/reference/nginx-sokvagar.md) | Var nginx har konfiguration, webbfiler och loggar |
 
 ### Övrigt
