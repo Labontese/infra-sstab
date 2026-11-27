@@ -40,6 +40,7 @@ Labbmiljön för Skämt & Sido Transport AB är fiktiv. Dess interna IP-adresser
 | 2026-11-23 | Jonas | Granska och uppdatera arkiveringsskript för Samba-backup (`arkivera-backup.sh`) | Google Antigravity (Claude Sonnet) | #46 | Nej |
 | 2026-11-25 | Liam | Skapat mall för DHCP Återställning som sedan skrevs i manuellt| Claude Sonnet 5| #39 | Nej |
 | 2026-11-25 | Liam | Skapat mall för backup rutinen som sedan skrevs i manuellt| Claude Sonnet 5| #53 | Nej |
+| 2026-11-26 | Jan | Förbättra how-to-guiden för `testa-delningar.sh` | OpenAI Codex | [PR #77](https://github.com/Labontese/infra-sstab/pull/77) | Ja, skriptlänken ändrades så att den går direkt till den testade versionen på GitHub. |
  main
 ## Mall
 
