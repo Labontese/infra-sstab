@@ -182,6 +182,57 @@ En vanlig anställd ska kunna läsa dokumenten men inte skapa, ändra eller ta b
 ![Gemensamma dokument går att öppna](../reference/bilder/active-directory/fildelning-gemensamma.png)
 ![Att skapa en fil i Gemensamma dokument nekas](../reference/bilder/active-directory/fildelning-gemensamma-skriv.png)
 
+## Steg 7 – Kontrollera åtkomst till delade mappar från Linux
+
+Delade mappar kan även öppnas från Linux. Vid testet användes `SRV-02-LNX` som SMB-klient mot Windowsservern `SRV-01-DC`. Anslutningen gjordes med domänkontot `SOST\Jan-test`. Se [IP-planen](ip-plan.md) för serverns adress.
+
+### Genomförande
+
+1. Öppna PowerShell på `SRV-01-DC`.
+2. Kontrollera att `Jan-test` ingår i HR-gruppen `gg-hr`.
+
+```powershell
+Get-ADGroupMember -Identity 'gg-hr' -Recursive |
+    Where-Object { $_.SamAccountName -eq 'jan-test' } |
+    Select-Object Name, SamAccountName
+```
+
+3. Öppna terminalen på `SRV-02-LNX`. Installera `smbclient` och `cifs-utils` vid behov.
+4. Montera HR-delningen. Ange lösenordet för `Jan-test` när du blir ombedd.
+
+```bash
+sudo mkdir -p /mnt/hr-test
+sudo mount -t cifs //192.168.50.10/HR /mnt/hr-test \
+    -o "username=jan-test,domain=SOST,vers=3.1.1,uid=$(id -u),gid=$(id -g)"
+```
+
+5. Kontrollera att HR-delningen är monterad med rätt konto och skapa en provfil.
+
+```bash
+findmnt --mountpoint /mnt/hr-test --source //192.168.50.10/HR \
+    --options username=jan-test &&
+    mktemp /mnt/hr-test/linux-test-XXXXXX
+```
+
+### Förväntat resultat
+
+En användare i HR-gruppen ska kunna skapa filer i HR-mappen. PowerShell visade att `Jan-test` ingår i `gg-hr` och testet skapade provfilen `linux-test-Zv2Dtq` i HR-delningen.
+
+![Jan-test ingår i HR-gruppen gg-hr](../reference/bilder/active-directory/fildelning-konto-hr.png)
+
+### Kontrollera Ekonomi
+
+1. Kör följande kommando med samma användarkonto.
+
+```bash
+smbclient //192.168.50.10/Ekonomi -W SOST -U jan-test -c 'ls'
+```
+
+2. Kontrollera att åtkomst nekas. I testet visades `NT_STATUS_ACCESS_DENIED` när `Jan-test` försökte lista innehållet i Ekonomi.
+
+![HR monterades och en provfil skapades. Åtkomst till Ekonomi nekades.](../reference/bilder/active-directory/fildelning-linux-test.png)
+
+Ta bort provfilen och kör `sudo umount /mnt/hr-test` när testet är klart.
 
 ## Resultat
 
@@ -195,4 +246,4 @@ Följande har konfigurerats:
 - Läsbehörighet för alla anställda på Gemensamma dokument.
 - En Windows-klient ansluten till domänen `sost.local`.
 - Lyckad inloggning med ett Active Directory-användarkonto.
-
+- Verifierad skrivrätt i HR och nekad åtkomst till Ekonomi från Linux.
