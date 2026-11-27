@@ -2,6 +2,8 @@
 
 Lösenordspolicyn bygger på *CIS Microsoft Windows Server 2025 Benchmark v2.1.0*, kapitel 1 "Account Policies" (sida 35). Policyn täcker lösenordskomplexitet, lösenordslängd, kontoutlåsning och intervall på lösenordsbyte.
 
+PSO:erna och Default Domain Policy finns också som skript: [`losenordspolicy.ps1`](../../scripts/windows/losenordspolicy.ps1).
+
 ## Steg 1 – Öppna Active Directory Administrative Center
 
 Lösenordspolicyn för en avdelning skapas som ett lösenordsinställningsobjekt (Password Settings Object, PSO) i Active Directory Administrative Center (ADAC).

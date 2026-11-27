@@ -1,5 +1,7 @@
 # Active Directory – Användare och säkerhetsgrupper
 
+Stegen finns också som skript: [`ad-struktur.ps1`](../../scripts/windows/ad-struktur.ps1).
+
 ## Steg 1 – Öppna Active Directory
 
 Active Directory Users and Computers (ADUC) används för att administrera användarkonton, grupper och organisationsenheter (OU).

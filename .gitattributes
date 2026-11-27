@@ -1,0 +1,5 @@
+# Skript och systemd-filer ska ha LF även när repot checkas ut på Windows.
+# Med CRLF stoppar bash med felet $'\r': command not found.
+*.sh      text eol=lf
+*.service text eol=lf
+*.timer   text eol=lf

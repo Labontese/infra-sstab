@@ -9,6 +9,8 @@ Principen tillämpas på två nivåer:
 
 Rättigheter ges alltid till grupper, aldrig till enskilda användare.
 
+GPO:n och delegeringen finns också som skript: [`minsta-rattighet.ps1`](../../scripts/windows/minsta-rattighet.ps1).
+
 ## Steg 1 – Öppna Group Policy Management
 
 ### Genomförande

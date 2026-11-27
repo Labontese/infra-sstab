@@ -3,6 +3,8 @@
 
 Konfigurationen bygger på principen Least Privilege, där användarna bara ska ha tillgång till de resurser som behövs för deras arbete.
 
+Steg 1–3 finns också som skript: [`fildelning.ps1`](../../scripts/windows/fildelning.ps1). Behörigheterna kan provas från en Linux-dator i produktionsnätet med [`testa-delningar.sh`](../../scripts/linux/testa-delningar.sh).
+
 ## Steg 1 – Skapa mappar för fildelning
 
 En huvudmapp skapas på Windows Server för att samla avdelningarnas dokument.
